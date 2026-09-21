@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ali Shirzad</title>
+<meta name="description" content="Ali Shirzad, software engineer. Web apps, backend services and automation.">
+<meta name="color-scheme" content="light dark">
+<script>
+  try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfbfd;
+  --tile: #f5f5f7;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --line: #d2d2d7;
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --nav: rgba(251, 251, 253, 0.72);
+  --radius: 28px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+:root { color-scheme: light; }
+/* Dark tokens: follow the system unless the visitor picked light, or force when they picked dark */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #000000;
+    --tile: #161617;
+    --card: #1d1d1f;
+    --text: #f5f5f7;
+    --muted: #a1a1a6;
+    --line: #424245;
+    --accent: #2997ff;
+    --accent-hover: #47a6ff;
+    --nav: rgba(0, 0, 0, 0.72);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #000000;
+  --tile: #161617;
+  --card: #1d1d1f;
+  --text: #f5f5f7;
+  --muted: #a1a1a6;
+  --line: #424245;
+  --accent: #2997ff;
+  --accent-hover: #47a6ff;
+  --nav: rgba(0, 0, 0, 0.72);
+}
+body { transition: background-color 0.3s, color 0.3s; }
+
+/* Theme toggle */
+.theme {
+  width: 44px; height: 44px; margin: 0 -10px 0 -6px;
+  display: grid; place-items: center;
+  background: none; border: 0; border-radius: 50%;
+  color: var(--muted); cursor: pointer;
+  transition: color 0.2s;
+}
+.theme:hover { color: var(--text); }
+.theme svg { width: 18px; height: 18px; }
+.theme .sun { display: none; }
+:root[data-theme="dark"] .theme .sun { display: block; }
+:root[data-theme="dark"] .theme .moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme .sun { display: block; }
+  :root:not([data-theme="light"]) .theme .moon { display: none; }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.47;
+  letter-spacing: -0.012em;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--card); padding: 8px 14px; border-radius: 8px; z-index: 100; }
+.skip:focus { left: 16px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+
+/* Nav */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--nav);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+}
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.brand { font-weight: 600; font-size: 17px; letter-spacing: -0.02em; }
+nav ul { display: flex; gap: 28px; list-style: none; align-items: center; font-size: 13px; }
+nav ul a { color: var(--muted); transition: color 0.2s; padding: 12px 0; }
+nav ul a:hover { color: var(--text); }
+nav .pill { color: #fff; background: var(--accent); padding: 5px 13px; border-radius: 980px; }
+nav .pill:hover { color: #fff; background: var(--accent-hover); }
+
+/* Type */
+h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif; font-weight: 700; }
+.eyebrow { font-size: 17px; font-weight: 600; color: var(--muted); margin-bottom: 12px; }
+.lede { font-size: clamp(19px, 2.2vw, 24px); line-height: 1.4; color: var(--muted); max-width: 680px; font-weight: 400; }
+.lede strong { color: var(--text); font-weight: 600; }
+
+/* Hero */
+.hero { padding: clamp(40px, 6vw, 64px) 0 clamp(32px, 4vw, 44px); text-align: center; }
+.hero h1 {
+  font-size: clamp(40px, 6.4vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  margin: 0 auto 18px;
+}
+.hero h1 span { color: var(--muted); }
+.hero .lede { margin: 0 auto 28px; }
+.ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 48px; padding: 0 26px; border-radius: 980px;
+  font-size: 17px; font-weight: 500;
+  transition: background 0.2s, transform 0.2s var(--ease);
+}
+.btn:active { transform: scale(0.97); }
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-hover); }
+.btn.ghost { color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.btn.ghost:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+/* Stats */
+.stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.xp-stats { margin-bottom: 24px; }
+.stat { padding: 32px 12px; text-align: center; }
+.stat + .stat { border-left: 1px solid var(--line); }
+.stat b { display: block; font-size: clamp(34px, 5vw, 52px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 14px; color: var(--muted); }
+
+/* Section heads */
+.head { text-align: center; margin-bottom: 56px; }
+.head h2 { font-size: clamp(40px, 6vw, 64px); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 16px; }
+.head .lede { margin: 0 auto; }
+
+/* Section header, compact (projects) */
+.sec { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 24px; margin-bottom: 20px; }
+.sec h2 { font-size: clamp(28px, 3.4vw, 36px); letter-spacing: -0.03em; line-height: 1.1; }
+.sec p { color: var(--muted); font-size: 17px; }
+
+/* Work overview */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.card {
+  background: var(--tile);
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -28px rgba(0,0,0,0.35); }
+.thumb {
+  aspect-ratio: 16 / 10;
+  background: var(--card);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  overflow: hidden;
+}
+.thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.thumb .dark-only { display: none; }
+:root[data-theme="dark"] .thumb .dark-only { display: block; }
+:root[data-theme="dark"] .thumb .light-only { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .thumb .dark-only { display: block; }
+  :root:not([data-theme="light"]) .thumb .light-only { display: none; }
+}
+.body { padding: 20px 22px 8px; display: flex; flex-direction: column; flex: 1; }
+.kicker { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.card h3 { font-size: 22px; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 6px; }
+.card .desc { color: var(--muted); font-size: 15px; line-height: 1.45; margin-bottom: 10px; }
+.card .tags { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.links { display: flex; gap: 18px; flex-wrap: wrap; margin-top: auto; }
+.links a { color: var(--accent); font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.links a:hover { text-decoration: underline; }
+.links a::after { content: " \203A"; margin-left: 4px; }
+.more ul { list-style: none; display: grid; gap: 12px; margin: 4px 0 18px; }
+.more li { font-size: 15px; line-height: 1.4; padding-top: 12px; border-top: 1px solid var(--line); }
+.more li:first-child { border-top: 0; padding-top: 0; }
+.more li span { display: block; color: var(--muted); font-size: 13px; }
+
+/* Drawn thumbs, until real screenshots replace them */
+.mock { display: grid; place-items: center; padding: 18px; }
+.bi { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; width: 100%; align-items: end; }
+.bars { display: flex; align-items: flex-end; gap: 7px; height: 110px; border-bottom: 1px solid var(--line); }
+.bars i { flex: 1; border-radius: 5px 5px 2px 2px; background: linear-gradient(180deg, #2997ff, #0055b3); }
+.chat { display: flex; flex-direction: column; gap: 8px; font-size: 11px; }
+.chat p { padding: 7px 10px; border-radius: 13px; line-height: 1.3; }
+.chat .q { align-self: flex-end; background: #0071e3; color: #fff; border-bottom-right-radius: 4px; }
+.chat .a { background: var(--tile); color: var(--text); border-bottom-left-radius: 4px; }
+.phone {
+  width: 128px; height: 150px; align-self: end; margin-bottom: -18px;
+  background: var(--tile); border-radius: 24px 24px 0 0; padding: 16px 10px 12px;
+  box-shadow: 0 0 0 5px #1d1d1f;
+  display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 6px;
+}
+.phone i { border-radius: 10px; }
+
+/* Screenshot zoom */
+button.thumb { display: block; width: 100%; padding: 0; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent); font: inherit; cursor: zoom-in; }
+.lightbox {
+  margin: auto; padding: 0; border: 0; background: transparent;
+  max-width: min(1400px, 94vw); max-height: 92vh; overflow: visible;
+}
+.lightbox[open] { animation: zoom-in 0.3s var(--ease); }
+.lightbox::backdrop { background: rgba(0, 0, 0, 0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.lightbox img { display: block; width: 100%; height: auto; max-height: 92vh; object-fit: contain; border-radius: 14px; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5); cursor: zoom-out; }
+.lightbox .close {
+  position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: rgba(0,0,0,0.55); color: #fff; font-size: 18px; line-height: 1; cursor: pointer;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.lightbox .close:hover { background: rgba(0,0,0,0.75); }
+@keyframes zoom-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+
+/* About */
+.about { margin-top: clamp(96px, 12vw, 150px); }
+.story { display: grid; grid-template-columns: 1.6fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+.story p { font-size: 19px; line-height: 1.6; margin-bottom: 20px; max-width: 62ch; }
+.story p:first-child { font-size: clamp(22px, 2.4vw, 26px); line-height: 1.45; font-weight: 500; letter-spacing: -0.02em; }
+.story em { font-style: normal; color: var(--accent); }
+.facts { background: var(--tile); border-radius: 22px; padding: 26px 26px 8px; }
+.facts dt { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.facts dd { font-size: 17px; margin: 4px 0 20px; }
+
+/* Experience */
+.xp { margin-top: clamp(80px, 10vw, 130px); }
+.timeline { max-width: 760px; margin: 0 auto; }
+.role { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding: 30px 0; border-top: 1px solid var(--line); }
+.role:last-child { border-bottom: 1px solid var(--line); }
+.sub { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 44px 0 14px; }
+.sub + .role { border-top: 1px solid var(--line); }
+.role time { color: var(--muted); font-size: 15px; padding-top: 4px; font-variant-numeric: tabular-nums; }
+.role h3 { font-size: 22px; letter-spacing: -0.02em; margin-bottom: 2px; }
+.role .org { color: var(--muted); font-size: 15px; margin-bottom: 10px; }
+.role p { font-size: 17px; }
+
+/* Contact */
+.contact { text-align: center; padding: clamp(120px, 14vw, 180px) 0; }
+.contact h2 { font-size: clamp(48px, 8vw, 88px); letter-spacing: -0.045em; line-height: 1.02; margin-bottom: 20px; }
+.contact .lede { margin: 0 auto 40px; }
+footer { border-top: 1px solid var(--line); padding: 22px 0 40px; font-size: 12px; color: var(--muted); }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+footer a:hover { color: var(--text); }
+
+/* Reveal */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (max-width: 980px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .story { grid-template-columns: 1fr; }
+  .role { grid-template-columns: 1fr; gap: 6px; }
+}
+@media (max-width: 600px) {
+  nav ul li.hide-sm { display: none; }
+  nav ul { gap: 18px; }
+  .grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr; }
+  .stat + .stat { border-left: 0; border-top: 1px solid var(--line); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .lightbox[open] { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top">Ali Shirzad</a>
+    <ul>
+      <li><a href="#work">Projects</a></li>
+      <li class="hide-sm"><a href="#experience">Experience</a></li>
+      <li class="hide-sm"><a href="#about">About</a></li>
+      <li class="hide-sm"><a href="#contact">Contact</a></li>
+      <li><button class="theme" type="button" aria-label="Switch to dark mode">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button></li>
+      <li><a class="pill" href="cv.pdf" download>CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <header class="hero wrap" id="top">
+    <p class="eyebrow reveal">Ali Shirzad, Software Engineer</p>
+    <h1 class="reveal">Software that <span>does the work.</span></h1>
+    <p class="lede reveal">Web apps, backend services and automation. At Volvo my tools save engineers <strong>400 hours a year.</strong></p>
+    <div class="ctas reveal">
+      <a class="btn primary" href="mailto:ali.shirzad.cs@gmail.com">Get in touch</a>
+      <a class="btn ghost" href="cv.pdf" download>Download CV</a>
+    </div>
+  </header>
+
+  <section class="wrap" id="work" aria-labelledby="work-h">
+    <div class="sec reveal">
+      <h2 id="work-h">Personal projects</h2>
+      <p>Built in my own time. The live ones open right in your browser.</p>
+    </div>
+    <div class="grid">
+
+      <article class="card reveal">
+        <div class="thumb mock" aria-hidden="true">
+          <div class="bi">
+            <div class="bars"><i style="height:92%"></i><i style="height:64%"></i><i style="height:78%"></i><i style="height:41%"></i><i style="height:55%"></i><i style="height:30%"></i></div>
+            <div class="chat">
+              <p class="q">Which products sell best in Stockholm?</p>
+              <p class="a">Studio Monitor S2, <b>412 units</b>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <p class="kicker">Full stack</p>
+          <h3>SmartBI Insights</h3>
+          <p class="desc">Sales dashboard for retail suppliers, with follow up questions in Swedish or English. Every figure comes straight from the database.</p>
+          <p class="tags">React · FastAPI · PostgreSQL · Docker</p>
+          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <button class="thumb zoom" type="button" aria-label="Enlarge screenshot of Voice Agent"><img class="light-only" src="img/voice-light-800.webp" srcset="img/voice-light-800.webp 800w, img/voice-light-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/voice-light-full.webp" alt="Voice agent call page showing the $1,000 balance and the Call Alex button" width="800" height="500" loading="lazy" decoding="async"><img class="dark-only" src="img/voice-dark-800.webp" srcset="img/voice-dark-800.webp 800w, img/voice-dark-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/voice-dark-full.webp" alt="Voice agent call page showing the $1,000 balance and the Call Alex button" width="800" height="500" loading="lazy" decoding="async"></button>
+        <div class="body">
+          <p class="kicker">Backend · Live</p>
+          <h3>Voice Agent</h3>
+          <p class="desc">Negotiates a $1,000 debt out loud. A policy service, not the model, decides every offer it is allowed to make.</p>
+          <p class="tags">Python · Cloudflare Workers · Vapi</p>
+          <div class="links">
+            <a href="https://ai-voice-agent.alishirzad444.workers.dev" target="_blank" rel="noopener">Try it</a>
+            <a href="https://youtu.be/aj7V9gMYMaU" target="_blank" rel="noopener">Recording</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <button class="thumb zoom" type="button" aria-label="Enlarge screenshot of HittaJob"><img class="light-only" src="img/hittajob-light-800.webp" srcset="img/hittajob-light-800.webp 800w, img/hittajob-light-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/hittajob-light-full.webp" alt="HittaJob landing page with the job search tracker board" width="800" height="500" loading="lazy" decoding="async"><img class="dark-only" src="img/hittajob-dark-800.webp" srcset="img/hittajob-dark-800.webp 800w, img/hittajob-dark-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/hittajob-dark-full.webp" alt="HittaJob landing page with the job search tracker board" width="800" height="500" loading="lazy" decoding="async"></button>
+        <div class="body">
+          <p class="kicker">Web app · Live</p>
+          <h3>HittaJob</h3>
+          <p class="desc">Job search tracker that pulls in postings and follows each application from saved to offer.</p>
+          <p class="tags">React · Node.js · Cloudflare Pages</p>
+          <div class="links"><a href="https://hittajob.pages.dev" target="_blank" rel="noopener">Open app</a></div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <button class="thumb zoom" type="button" aria-label="Enlarge screenshot of Kontokoll"><img class="light-only" src="img/kontokoll-light-800.webp" srcset="img/kontokoll-light-800.webp 800w, img/kontokoll-light-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/kontokoll-light-full.webp" alt="Kontokoll dashboard with spending by category, balance through the month and monthly summary" width="800" height="500" loading="lazy" decoding="async"><img class="dark-only" src="img/kontokoll-dark-800.webp" srcset="img/kontokoll-dark-800.webp 800w, img/kontokoll-dark-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/kontokoll-dark-full.webp" alt="Kontokoll dashboard with spending by category, balance through the month and monthly summary" width="800" height="500" loading="lazy" decoding="async"></button>
+        <div class="body">
+          <p class="kicker">Web app</p>
+          <h3>Kontokoll</h3>
+          <p class="desc">Personal finance dashboard built from your bank's CSV export. Runs in the browser. Nothing is uploaded.</p>
+          <p class="tags">JavaScript · Supabase</p>
+          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="thumb mock" aria-hidden="true">
+          <div class="phone"><i style="background:#ff453a"></i><i style="background:#0a84ff"></i><i style="background:#ffd60a"></i><i style="background:#30d158"></i></div>
+        </div>
+        <div class="body">
+          <p class="kicker">Real time</p>
+          <h3>Friday Quiz</h3>
+          <p class="desc">Team quiz with questions on the big screen and answers on phones. Scores itself and picks next week's host.</p>
+          <p class="tags">Node.js · no dependencies</p>
+          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
+        </div>
+      </article>
+
+      <article class="card more reveal">
+        <div class="body">
+          <p class="kicker">Chalmers</p>
+          <h3>Academic projects</h3>
+          <ul>
+            <li>GPU accelerated CFD solver<span>Python, CUDA and MPI on A100 and H100 clusters.</span></li>
+            <li>AI pollen detection, with Ericsson<span>Classification pipeline, over 90% accuracy.</span></li>
+            <li>Image enhancement and colour restoration<span>ResNet50 and U-Net in PyTorch and TensorFlow.</span></li>
+            <li>Multi vehicle coordination<span>Bachelor's thesis. Real time control of autonomous scale cars.</span></li>
+          </ul>
+          <div class="links"><a href="cv.pdf" download>Full CV</a></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="wrap xp" id="experience" aria-labelledby="xp-h">
+    <div class="head reveal">
+      <h2 id="xp-h">Professional experience</h2>
+      <p class="lede">Volvo Group Trucks Technology, building tools hardware engineers use every week.</p>
+    </div>
+    <div class="stats xp-stats reveal">
+      <div class="stat"><b>400 h</b><span>engineering time saved per year at Volvo</span></div>
+      <div class="stat"><b>3</b><span>roles at Volvo Group Trucks Technology</span></div>
+      <div class="stat"><b>1 year</b><span>of software engineering at Volvo Group</span></div>
+    </div>
+    <div class="timeline">
+      <div class="role reveal">
+        <time>Jun 2026 to now</time>
+        <div>
+          <h3>Software Engineer Intern</h3>
+          <p class="org">Volvo Group Trucks Technology</p>
+          <p>Built a pipeline that generates pinout documentation automatically and archives it for traceability. Engineers used to write these by hand.</p>
+        </div>
+      </div>
+      <div class="role reveal">
+        <time>Jan to Jun 2026</time>
+        <div>
+          <h3>Master's Thesis</h3>
+          <p class="org">Volvo Group Trucks Technology</p>
+          <p>Trained a neural network surrogate that approximates full truck vibration response at a fraction of the cost of the finite element model. Small enough to run on a data logger.</p>
+        </div>
+      </div>
+      <div class="role reveal">
+        <time>Jun to Aug 2025</time>
+        <div>
+          <h3>Software Engineer Intern</h3>
+          <p class="org">Volvo Group Trucks Technology</p>
+          <p>Reworked a schematic generation tool and wrote the validation that made it trusted by the team. It replaced a manual workflow costing about 400 hours a year.</p>
+        </div>
+      </div>
+      <h3 class="sub reveal">Education</h3>
+      <div class="role reveal">
+        <time>2021 to 2026</time>
+        <div>
+          <h3>M.Sc. Complex Adaptive Systems</h3>
+          <p class="org">Chalmers University of Technology</p>
+          <p>B.Sc. Computer Science and Engineering. Projects in multi GPU CUDA solvers, computer vision and autonomous vehicle coordination.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap about" id="about" aria-labelledby="about-h">
+    <div class="head reveal">
+      <h2 id="about-h">About me</h2>
+      <p class="lede">How hard can it be?</p>
+    </div>
+    <div class="story">
+      <div class="reveal">
+        <p>I came to Sweden in 2015 without speaking Swedish, and my English was very limited.</p>
+        <p>I learned the language in grades 7 to 9, then moved on to the Technology programme in upper secondary school. In my second year I told my English teacher I wanted to study at Chalmers. She was honest with me: the teaching there is in English, and with my English at the time, she would think twice about it.</p>
+        <p>In 2026 I graduated from Chalmers with a degree in Computer Science and Engineering.</p>
+        <p>That road left me with a habit I still have. When a problem looks hard, my first thought is not <em>"I can't do this"</em> but <em>"how hard can it be?"</em> Then I figure out how it works, learn what I need, and solve it. I care about details and the quality of what I deliver, and about the people I work with. A solution should not only be correct. It should be useful to the person using it.</p>
+        <p>It is also why I build things in my free time. Our team ran its Friday quiz in PowerPoint. Nobody asked me to fix it, but I thought it could be simpler, so I built Friday Quiz.</p>
+      </div>
+      <dl class="facts reveal">
+        <dt>Based in</dt><dd>Gothenburg, open to relocating</dd>
+        <dt>Education</dt><dd>M.Sc. Chalmers University of Technology</dd>
+        <dt>Languages</dt><dd>Swedish, English, Persian/Dari</dd>
+        <dt>Learning now</dt><dd>SQL, cloud architecture, RAG</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="wrap contact" id="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h" class="reveal">Curious to know more?</h2>
+    <p class="lede reveal">I would be happy to hear from you. I am looking for software engineering roles in Sweden, in backend, full stack, automation or ML.</p>
+    <div class="ctas reveal">
+      <a class="btn primary" href="mailto:ali.shirzad.cs@gmail.com">Email me</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/alishirzad99" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost" href="https://github.com/alishir99" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Ali Shirzad, 2026</span>
+    <a href="mailto:ali.shirzad.cs@gmail.com">ali.shirzad.cs@gmail.com</a>
+  </div>
+</footer>
+
+<dialog class="lightbox" aria-label="Screenshot">
+  <button class="close" type="button" aria-label="Close">&#x2715;</button>
+  <img alt="">
+</dialog>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  const root = document.documentElement;
+  const toggle = document.querySelector('.theme');
+  const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const label = () => toggle.setAttribute('aria-label', isDark() ? 'Switch to light mode' : 'Switch to dark mode');
+  label();
+  toggle.addEventListener('click', () => {
+    root.dataset.theme = isDark() ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+    label();
+  });
+
+  const lb = document.querySelector('.lightbox');
+  const lbImg = lb.querySelector('img');
+  document.querySelectorAll('.zoom').forEach((btn) => btn.addEventListener('click', () => {
+    const shown = [...btn.querySelectorAll('img')].find((i) => i.offsetParent !== null);
+    lbImg.src = shown.currentSrc;
+    lbImg.alt = shown.alt;
+    const full = new Image();
+    full.onload = () => { if (lb.open) lbImg.src = full.src; };
+    full.src = shown.dataset.full;
+    lb.showModal();
+  }));
+  lb.addEventListener('click', () => lb.close());
+</script>
+</body>
+</html>
