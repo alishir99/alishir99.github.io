@@ -207,7 +207,11 @@ button.thumb { display: block; width: 100%; padding: 0; border: 0; border-bottom
 .lightbox[open] { animation: zoom-in 0.3s var(--ease); }
 .lightbox::backdrop { background: rgba(0, 0, 0, 0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .lightbox img { display: block; width: 100%; height: auto; max-height: 92vh; object-fit: contain; border-radius: 14px; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5); cursor: zoom-out; }
+.lightbox video { display: none; width: min(1280px, 94vw); height: auto; aspect-ratio: 16 / 9; max-height: 92vh; border-radius: 14px; background: #000; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5); }
+.lightbox.vid video { display: block; }
+.lightbox.vid img { display: none; }
 .lightbox .close {
+  z-index: 1;
   position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%;
   border: 0; background: rgba(0,0,0,0.55); color: #fff; font-size: 18px; line-height: 1; cursor: pointer;
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -321,7 +325,7 @@ footer a:hover { color: var(--text); }
           <h3>SmartBI Insights</h3>
           <p class="desc">Sales dashboard for retail suppliers, with follow up questions in Swedish or English. Every figure comes straight from the database.</p>
           <p class="tags">React · FastAPI · PostgreSQL · Docker</p>
-          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
+          <div class="links"><a href="video/smartbi.mp4" data-video data-poster="video/smartbi.jpg" data-label="SmartBI Insights video">Watch video</a><a href="https://github.com/alishir99">View code</a></div>
         </div>
       </article>
 
@@ -333,6 +337,7 @@ footer a:hover { color: var(--text); }
           <p class="desc">Negotiates a $1,000 debt out loud. A policy service, not the model, decides every offer it is allowed to make.</p>
           <p class="tags">Python · Cloudflare Workers · Vapi</p>
           <div class="links">
+            <a href="video/voice-agent.mp4" data-video data-poster="video/voice-agent.jpg" data-label="AI Voice Agent video">Watch video</a>
             <a href="https://ai-voice-agent.alishirzad444.workers.dev" target="_blank" rel="noopener">Try it</a>
             <a href="https://youtu.be/aj7V9gMYMaU" target="_blank" rel="noopener">Recording</a>
           </div>
@@ -346,18 +351,18 @@ footer a:hover { color: var(--text); }
           <h3>HittaJob</h3>
           <p class="desc">Job search tracker that pulls in postings and follows each application from saved to offer.</p>
           <p class="tags">React · Node.js · Cloudflare Pages</p>
-          <div class="links"><a href="https://hittajob.pages.dev" target="_blank" rel="noopener">Open app</a></div>
+          <div class="links"><a href="video/hittajob.mp4" data-video data-poster="video/hittajob.jpg" data-label="HittaJob video">Watch video</a><a href="https://hittajob.pages.dev" target="_blank" rel="noopener">Open app</a></div>
         </div>
       </article>
 
       <article class="card reveal">
         <button class="thumb zoom" type="button" aria-label="Enlarge screenshot of Kontokoll"><img class="light-only" src="img/kontokoll-light-800.webp" srcset="img/kontokoll-light-800.webp 800w, img/kontokoll-light-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/kontokoll-light-full.webp" alt="Kontokoll dashboard with spending by category, balance through the month and monthly summary" width="800" height="500" loading="lazy" decoding="async"><img class="dark-only" src="img/kontokoll-dark-800.webp" srcset="img/kontokoll-dark-800.webp 800w, img/kontokoll-dark-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/kontokoll-dark-full.webp" alt="Kontokoll dashboard with spending by category, balance through the month and monthly summary" width="800" height="500" loading="lazy" decoding="async"></button>
         <div class="body">
-          <p class="kicker">Web app</p>
+          <p class="kicker">Web app · Live</p>
           <h3>Kontokoll</h3>
           <p class="desc">Personal finance dashboard built from your bank's CSV export. Runs in the browser. Nothing is uploaded.</p>
           <p class="tags">JavaScript · Supabase</p>
-          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
+          <div class="links"><a href="video/kontokoll.mp4" data-video data-poster="video/kontokoll.jpg" data-label="Kontokoll video">Watch video</a><a href="https://alishir99.github.io/kontokol/" target="_blank" rel="noopener">Open app</a><a href="https://github.com/alishir99/kontokol" target="_blank" rel="noopener">View code</a></div>
         </div>
       </article>
 
@@ -370,7 +375,7 @@ footer a:hover { color: var(--text); }
           <h3>Friday Quiz</h3>
           <p class="desc">Team quiz with questions on the big screen and answers on phones. Scores itself and picks next week's host.</p>
           <p class="tags">Node.js · no dependencies</p>
-          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
+          <div class="links"><a href="video/friday-quiz.mp4" data-video data-poster="video/friday-quiz.jpg" data-label="Friday Quiz video">Watch video</a><a href="https://github.com/alishir99">View code</a></div>
         </div>
       </article>
 
@@ -481,6 +486,7 @@ footer a:hover { color: var(--text); }
 <dialog class="lightbox" aria-label="Screenshot">
   <button class="close" type="button" aria-label="Close">&#x2715;</button>
   <img alt="">
+  <video controls playsinline preload="none"></video>
 </dialog>
 
 <script>
@@ -502,7 +508,10 @@ footer a:hover { color: var(--text); }
 
   const lb = document.querySelector('.lightbox');
   const lbImg = lb.querySelector('img');
+  const lbVid = lb.querySelector('video');
   document.querySelectorAll('.zoom').forEach((btn) => btn.addEventListener('click', () => {
+    lb.classList.remove('vid');
+    lb.setAttribute('aria-label', 'Screenshot');
     const shown = [...btn.querySelectorAll('img')].find((i) => i.offsetParent !== null);
     lbImg.src = shown.currentSrc;
     lbImg.alt = shown.alt;
@@ -511,7 +520,18 @@ footer a:hover { color: var(--text); }
     full.src = shown.dataset.full;
     lb.showModal();
   }));
-  lb.addEventListener('click', () => lb.close());
+  // "Watch video" links play in the same lightbox; without JS they open the mp4 directly.
+  document.querySelectorAll('[data-video]').forEach((a) => a.addEventListener('click', (e) => {
+    e.preventDefault();
+    lb.classList.add('vid');
+    lb.setAttribute('aria-label', a.dataset.label || 'Video');
+    lbVid.poster = a.dataset.poster || '';
+    lbVid.src = a.getAttribute('href');
+    lb.showModal();
+    lbVid.play().catch(() => {});
+  }));
+  lb.addEventListener('click', (e) => { if (e.target !== lbVid) lb.close(); });
+  lb.addEventListener('close', () => { lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load(); });
 </script>
 </body>
 </html>
