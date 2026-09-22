@@ -157,8 +157,25 @@ h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "
   transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
 .card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -28px rgba(0,0,0,0.35); }
+/* Light mode: white cards floating off the page, a tight contact shadow plus a wide soft one */
+:root:not([data-theme="dark"]) .card {
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 6px 16px -4px rgba(0, 0, 0, 0.07),
+    0 24px 48px -16px rgba(0, 0, 0, 0.12);
+}
+:root:not([data-theme="dark"]) .card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 14px 28px -8px rgba(0, 0, 0, 0.12),
+    0 40px 72px -24px rgba(0, 0, 0, 0.24);
+}
 .thumb {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   background: var(--card);
   border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
   overflow: hidden;
@@ -181,35 +198,29 @@ h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "
 .more li:first-child { border-top: 0; padding-top: 0; }
 .more li span { display: block; color: var(--muted); font-size: 13px; }
 
-/* Drawn thumbs, until real screenshots replace them */
-.mock { display: grid; place-items: center; padding: 18px; }
-.bi { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; width: 100%; align-items: end; }
-.bars { display: flex; align-items: flex-end; gap: 7px; height: 110px; border-bottom: 1px solid var(--line); }
-.bars i { flex: 1; border-radius: 5px 5px 2px 2px; background: linear-gradient(180deg, #2997ff, #0055b3); }
-.chat { display: flex; flex-direction: column; gap: 8px; font-size: 11px; }
-.chat p { padding: 7px 10px; border-radius: 13px; line-height: 1.3; }
-.chat .q { align-self: flex-end; background: #0071e3; color: #fff; border-bottom-right-radius: 4px; }
-.chat .a { background: var(--tile); color: var(--text); border-bottom-left-radius: 4px; }
-.phone {
-  width: 128px; height: 150px; align-self: end; margin-bottom: -18px;
-  background: var(--tile); border-radius: 24px 24px 0 0; padding: 16px 10px 12px;
-  box-shadow: 0 0 0 5px #1d1d1f;
-  display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 6px;
+/* Video tiles: poster + Apple-style play button; a click opens the full-size player */
+.tile { position: relative; display: block; width: 100%; padding: 0; border: 0; background: transparent; font: inherit; cursor: pointer; }
+.tile img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+.tile:hover img { transform: scale(1.03); }
+.tile .play {
+  position: absolute; right: 12px; bottom: 12px; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+  background: rgba(40, 40, 44, 0.56);
+  backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px);
+  transition: background 0.2s, transform 0.2s var(--ease);
 }
-.phone i { border-radius: 10px; }
+.tile:hover .play { background: rgba(40, 40, 44, 0.78); }
+.tile:active .play { transform: scale(0.92); }
+.tile .play svg { width: 18px; height: 18px; margin-left: 2px; }
 
-/* Screenshot zoom */
-button.thumb { display: block; width: 100%; padding: 0; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent); font: inherit; cursor: zoom-in; }
+/* Full-size player */
 .lightbox {
   margin: auto; padding: 0; border: 0; background: transparent;
   max-width: min(1400px, 94vw); max-height: 92vh; overflow: visible;
 }
 .lightbox[open] { animation: zoom-in 0.3s var(--ease); }
 .lightbox::backdrop { background: rgba(0, 0, 0, 0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-.lightbox img { display: block; width: 100%; height: auto; max-height: 92vh; object-fit: contain; border-radius: 14px; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5); cursor: zoom-out; }
-.lightbox video { display: none; width: min(1280px, 94vw); height: auto; aspect-ratio: 16 / 9; max-height: 92vh; border-radius: 14px; background: #000; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5); }
-.lightbox.vid video { display: block; }
-.lightbox.vid img { display: none; }
+.lightbox video { display: block; width: min(1280px, 94vw); height: auto; aspect-ratio: 16 / 9; max-height: 92vh; border-radius: 14px; background: #000; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5); }
 .lightbox .close {
   z-index: 1;
   position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%;
@@ -311,33 +322,30 @@ footer a:hover { color: var(--text); }
     <div class="grid">
 
       <article class="card reveal">
-        <div class="thumb mock" aria-hidden="true">
-          <div class="bi">
-            <div class="bars"><i style="height:92%"></i><i style="height:64%"></i><i style="height:78%"></i><i style="height:41%"></i><i style="height:55%"></i><i style="height:30%"></i></div>
-            <div class="chat">
-              <p class="q">Which products sell best in Stockholm?</p>
-              <p class="a">Studio Monitor S2, <b>412 units</b>.</p>
-            </div>
-          </div>
-        </div>
+        <button class="thumb tile" type="button" data-src="video/smartbi.mp4" data-name="SmartBI Insights" aria-label="Play SmartBI Insights video">
+          <img src="video/smartbi.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+        </button>
         <div class="body">
           <p class="kicker">Full stack</p>
           <h3>SmartBI Insights</h3>
           <p class="desc">Sales dashboard for retail suppliers, with follow up questions in Swedish or English. Every figure comes straight from the database.</p>
           <p class="tags">React · FastAPI · PostgreSQL · Docker</p>
-          <div class="links"><a href="video/smartbi.mp4" data-video data-poster="video/smartbi.jpg" data-label="SmartBI Insights video">Watch video</a><a href="https://github.com/alishir99">View code</a></div>
+          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
         </div>
       </article>
 
       <article class="card reveal">
-        <button class="thumb zoom" type="button" aria-label="Enlarge screenshot of AI Voice Agent"><img class="light-only" src="img/voice-light-800.webp" srcset="img/voice-light-800.webp 800w, img/voice-light-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/voice-light-full.webp" alt="Voice agent call page showing the $1,000 balance and the Call Sam button" width="800" height="500" loading="lazy" decoding="async"><img class="dark-only" src="img/voice-dark-800.webp" srcset="img/voice-dark-800.webp 800w, img/voice-dark-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/voice-dark-full.webp" alt="Voice agent call page showing the $1,000 balance and the Call Sam button" width="800" height="500" loading="lazy" decoding="async"></button>
+        <button class="thumb tile" type="button" data-src="video/voice-agent.mp4" data-name="AI Voice Agent" aria-label="Play AI Voice Agent video">
+          <img src="video/voice-agent.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+        </button>
         <div class="body">
           <p class="kicker">Backend · Live</p>
           <h3>AI Voice Agent</h3>
           <p class="desc">Negotiates a $1,000 debt out loud. A policy service, not the model, decides every offer it is allowed to make.</p>
           <p class="tags">Python · Cloudflare Workers · Vapi</p>
           <div class="links">
-            <a href="video/voice-agent.mp4" data-video data-poster="video/voice-agent.jpg" data-label="AI Voice Agent video">Watch video</a>
             <a href="https://ai-voice-agent.alishirzad444.workers.dev" target="_blank" rel="noopener">Try it</a>
             <a href="https://youtu.be/aj7V9gMYMaU" target="_blank" rel="noopener">Recording</a>
           </div>
@@ -345,37 +353,44 @@ footer a:hover { color: var(--text); }
       </article>
 
       <article class="card reveal">
-        <button class="thumb zoom" type="button" aria-label="Enlarge screenshot of HittaJob"><img class="light-only" src="img/hittajob-light-800.webp" srcset="img/hittajob-light-800.webp 800w, img/hittajob-light-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/hittajob-light-full.webp" alt="HittaJob landing page with the job search tracker board" width="800" height="500" loading="lazy" decoding="async"><img class="dark-only" src="img/hittajob-dark-800.webp" srcset="img/hittajob-dark-800.webp 800w, img/hittajob-dark-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/hittajob-dark-full.webp" alt="HittaJob landing page with the job search tracker board" width="800" height="500" loading="lazy" decoding="async"></button>
+        <button class="thumb tile" type="button" data-src="video/hittajob.mp4" data-name="HittaJob" aria-label="Play HittaJob video">
+          <img src="video/hittajob.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+        </button>
         <div class="body">
           <p class="kicker">Web app · Live</p>
           <h3>HittaJob</h3>
           <p class="desc">Job search tracker that pulls in postings and follows each application from saved to offer.</p>
           <p class="tags">React · Node.js · Cloudflare Pages</p>
-          <div class="links"><a href="video/hittajob.mp4" data-video data-poster="video/hittajob.jpg" data-label="HittaJob video">Watch video</a><a href="https://hittajob.pages.dev" target="_blank" rel="noopener">Open app</a></div>
+          <div class="links"><a href="https://hittajob.pages.dev" target="_blank" rel="noopener">Open app</a></div>
         </div>
       </article>
 
       <article class="card reveal">
-        <button class="thumb zoom" type="button" aria-label="Enlarge screenshot of Kontokoll"><img class="light-only" src="img/kontokoll-light-800.webp" srcset="img/kontokoll-light-800.webp 800w, img/kontokoll-light-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/kontokoll-light-full.webp" alt="Kontokoll dashboard with spending by category, balance through the month and monthly summary" width="800" height="500" loading="lazy" decoding="async"><img class="dark-only" src="img/kontokoll-dark-800.webp" srcset="img/kontokoll-dark-800.webp 800w, img/kontokoll-dark-1400.webp 1400w" sizes="(max-width: 600px) 92vw, (max-width: 980px) 46vw, 340px" data-full="img/kontokoll-dark-full.webp" alt="Kontokoll dashboard with spending by category, balance through the month and monthly summary" width="800" height="500" loading="lazy" decoding="async"></button>
+        <button class="thumb tile" type="button" data-src="video/kontokoll.mp4" data-name="Kontokoll" aria-label="Play Kontokoll video">
+          <img src="video/kontokoll.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+        </button>
         <div class="body">
           <p class="kicker">Web app · Live</p>
           <h3>Kontokoll</h3>
           <p class="desc">Personal finance dashboard built from your bank's CSV export. Runs in the browser. Nothing is uploaded.</p>
           <p class="tags">JavaScript · Supabase</p>
-          <div class="links"><a href="video/kontokoll.mp4" data-video data-poster="video/kontokoll.jpg" data-label="Kontokoll video">Watch video</a><a href="https://alishir99.github.io/kontokol/" target="_blank" rel="noopener">Open app</a><a href="https://github.com/alishir99/kontokol" target="_blank" rel="noopener">View code</a></div>
+          <div class="links"><a href="https://alishir99.github.io/kontokol/" target="_blank" rel="noopener">Open app</a><a href="https://github.com/alishir99/kontokol" target="_blank" rel="noopener">View code</a></div>
         </div>
       </article>
 
       <article class="card reveal">
-        <div class="thumb mock" aria-hidden="true">
-          <div class="phone"><i style="background:#ff453a"></i><i style="background:#0a84ff"></i><i style="background:#ffd60a"></i><i style="background:#30d158"></i></div>
-        </div>
+        <button class="thumb tile" type="button" data-src="video/friday-quiz.mp4" data-name="Friday Quiz" aria-label="Play Friday Quiz video">
+          <img src="video/friday-quiz.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+        </button>
         <div class="body">
           <p class="kicker">Real time</p>
           <h3>Friday Quiz</h3>
           <p class="desc">Team quiz with questions on the big screen and answers on phones. Scores itself and picks next week's host.</p>
           <p class="tags">Node.js · no dependencies</p>
-          <div class="links"><a href="video/friday-quiz.mp4" data-video data-poster="video/friday-quiz.jpg" data-label="Friday Quiz video">Watch video</a><a href="https://github.com/alishir99">View code</a></div>
+          <div class="links"><a href="https://github.com/alishir99">View code</a></div>
         </div>
       </article>
 
@@ -483,9 +498,8 @@ footer a:hover { color: var(--text); }
   </div>
 </footer>
 
-<dialog class="lightbox" aria-label="Screenshot">
+<dialog class="lightbox" aria-label="Video">
   <button class="close" type="button" aria-label="Close">&#x2715;</button>
-  <img alt="">
   <video controls playsinline preload="none"></video>
 </dialog>
 
@@ -506,27 +520,13 @@ footer a:hover { color: var(--text); }
     label();
   });
 
+  // Video tiles: a click opens the full-size player and starts from the beginning.
   const lb = document.querySelector('.lightbox');
-  const lbImg = lb.querySelector('img');
   const lbVid = lb.querySelector('video');
-  document.querySelectorAll('.zoom').forEach((btn) => btn.addEventListener('click', () => {
-    lb.classList.remove('vid');
-    lb.setAttribute('aria-label', 'Screenshot');
-    const shown = [...btn.querySelectorAll('img')].find((i) => i.offsetParent !== null);
-    lbImg.src = shown.currentSrc;
-    lbImg.alt = shown.alt;
-    const full = new Image();
-    full.onload = () => { if (lb.open) lbImg.src = full.src; };
-    full.src = shown.dataset.full;
-    lb.showModal();
-  }));
-  // "Watch video" links play in the same lightbox; without JS they open the mp4 directly.
-  document.querySelectorAll('[data-video]').forEach((a) => a.addEventListener('click', (e) => {
-    e.preventDefault();
-    lb.classList.add('vid');
-    lb.setAttribute('aria-label', a.dataset.label || 'Video');
-    lbVid.poster = a.dataset.poster || '';
-    lbVid.src = a.getAttribute('href');
+  document.querySelectorAll('.tile').forEach((tile) => tile.addEventListener('click', () => {
+    lbVid.poster = tile.querySelector('img').currentSrc;
+    lbVid.src = tile.dataset.src;
+    lb.setAttribute('aria-label', tile.dataset.name + ' video');
     lb.showModal();
     lbVid.play().catch(() => {});
   }));
