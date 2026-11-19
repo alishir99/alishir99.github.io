@@ -545,13 +545,10 @@ footer a:hover { color: var(--text); }
     lbVid.play().catch(() => {});
   }));
   lb.addEventListener('click', (e) => { if (e.target !== lbVid) lb.close(); });
-  // SmartBI scales to zero on Azure. Wake it (web, api, mcp, database) while the visitor reads
-  // the card, so "Open app" isn't a 30 s cold start. Opaque no-cors pings: we only need them sent.
-  for (const card of document.querySelectorAll('[data-warm]')) new IntersectionObserver((es, obs) => {
-    if (!es[0].isIntersecting) return;
-    obs.disconnect();
+  // SmartBI scales to zero on Azure. Wake it (web, api, mcp, database) as soon as anyone opens
+  // the portfolio, so "Open app" isn't a 30 s cold start. Opaque no-cors pings: we only need them sent.
+  for (const card of document.querySelectorAll('[data-warm]'))
     for (const url of card.dataset.warm.split(' ')) fetch(url, { mode: 'no-cors' }).catch(() => {});
-  }).observe(card);
   lb.addEventListener('close', () => { lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load(); });
 </script>
 </body>
