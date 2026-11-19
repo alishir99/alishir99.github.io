@@ -335,7 +335,7 @@ footer a:hover { color: var(--text); }
         </div>
       </article>
 
-      <article class="card reveal">
+      <article class="card reveal" data-warm="https://smartbi.jollycliff-2adc6508.francecentral.azurecontainerapps.io https://api.jollycliff-2adc6508.francecentral.azurecontainerapps.io/api/warm">
         <button class="thumb tile" type="button" data-src="video/smartbi.mp4" data-name="SmartBI Insights" aria-label="Play SmartBI Insights video">
           <img src="video/smartbi.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
           <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
@@ -545,6 +545,13 @@ footer a:hover { color: var(--text); }
     lbVid.play().catch(() => {});
   }));
   lb.addEventListener('click', (e) => { if (e.target !== lbVid) lb.close(); });
+  // SmartBI scales to zero on Azure. Wake it (web, api, mcp, database) while the visitor reads
+  // the card, so "Open app" isn't a 30 s cold start. Opaque no-cors pings: we only need them sent.
+  for (const card of document.querySelectorAll('[data-warm]')) new IntersectionObserver((es, obs) => {
+    if (!es[0].isIntersecting) return;
+    obs.disconnect();
+    for (const url of card.dataset.warm.split(' ')) fetch(url, { mode: 'no-cors' }).catch(() => {});
+  }).observe(card);
   lb.addEventListener('close', () => { lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load(); });
 </script>
 </body>
