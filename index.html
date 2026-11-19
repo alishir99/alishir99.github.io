@@ -6,10 +6,10 @@
 <title>Ali Shirzad</title>
 <meta name="description" content="Ali Shirzad, software engineer. Web apps, backend services and automation.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://alishir99.github.io/">
+<meta property="og:url" content="https://alishirzad.se/">
 <meta property="og:title" content="Ali Shirzad, Software Engineer">
 <meta property="og:description" content="Web apps, backend services and automation. Open the live projects.">
-<meta property="og:image" content="https://alishir99.github.io/og.jpg">
+<meta property="og:image" content="https://alishirzad.se/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="627">
 <meta property="og:image:alt" content="Portfolio of Ali Shirzad: Software that does the work.">
@@ -65,8 +65,9 @@ body { transition: background-color 0.3s, color 0.3s; }
 :root[data-theme="dark"] .theme .sun { display: block; }
 :root[data-theme="dark"] .theme .moon { display: none; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; -webkit-text-size-adjust: 100%; }
 body {
+  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
@@ -111,10 +112,57 @@ h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "
   letter-spacing: -0.045em;
   margin: 0 auto 18px;
 }
-.hero h1 span { color: var(--muted); }
+.hero h1 .m { color: var(--muted); }
+/* Headline: each word rises out of a soft blur, one after another */
+.hero h1 .w { display: inline-block; opacity: 0; filter: blur(10px); transform: translateY(0.35em); animation: word 1s var(--ease) forwards; animation-delay: calc(120ms + var(--i) * 90ms); }
+@keyframes word { to { opacity: 1; filter: none; transform: none; } }
+/* Hero glow: two soft colour fields drifting slowly; the hero fades and sinks as you scroll past */
+.hero { position: relative; opacity: calc(1 - var(--out, 0) * 1.1); transform: translateY(calc(var(--out, 0) * 60px)) scale(calc(1 - var(--out, 0) * 0.04)); }
+.hero::before {
+  content: ""; position: absolute; z-index: -1; left: 50%; top: -60px; width: min(900px, 120vw); height: 460px; translate: -50% 0;
+  background:
+    radial-gradient(38% 48% at 32% 45%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%),
+    radial-gradient(34% 44% at 68% 52%, rgba(100, 210, 255, 0.18), transparent 70%);
+  filter: blur(36px); animation: drift 16s ease-in-out infinite alternate; pointer-events: none;
+}
+@keyframes drift { from { transform: rotate(-6deg) scale(1); } to { transform: rotate(6deg) scale(1.12); } }
+
+/* Availability pill with a pulsing dot */
+.status {
+  display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px;
+  padding: 7px 16px 7px 13px; border-radius: 980px; font-size: 14px; font-weight: 500; color: var(--muted);
+  background: color-mix(in srgb, var(--card) 70%, transparent); box-shadow: inset 0 0 0 1px var(--line);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.status b { color: var(--text); font-weight: 600; }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: #30d158; animation: pulse 2.2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(48, 209, 88, 0.55); } 70%, 100% { box-shadow: 0 0 0 10px rgba(48, 209, 88, 0); } }
+
+
+/* Journey: a huge year stays pinned and rolls forward as the story scrolls */
+.journey { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); margin-bottom: clamp(48px, 7vw, 96px); }
+.journey .year {
+  position: sticky; top: calc(50vh - 0.55em); align-self: start; margin: 26vh 0 22vh;
+  font-size: clamp(84px, 12.5vw, 184px); font-weight: 700; letter-spacing: -0.06em; line-height: 1; padding-right: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.steps { list-style: none; padding: 18vh 0 22vh; }
+.steps li { min-height: 52vh; display: flex; flex-direction: column; justify-content: center; opacity: 0.2; transform: translateY(18px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.steps li.active { opacity: 1; transform: none; }
+.steps h3 { font-size: clamp(30px, 3.6vw, 46px); letter-spacing: -0.04em; line-height: 1.08; margin-bottom: 14px; }
+.steps p { font-size: clamp(17px, 1.5vw, 20px); color: var(--muted); line-height: 1.55; max-width: 40ch; }
+
+/* Contact: copy-email confirmation */
+.copy.done { color: #fff; background: #30d158; box-shadow: none; }
+
+/* Scroll progress, a hairline at the very top */
+.progress { position: fixed; top: 0; left: 0; z-index: 60; width: 100%; height: 2px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+
 .hero .lede { margin: 0 auto 28px; }
 .ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 .btn {
+  font: inherit; border: 0; cursor: pointer; background: none;
   display: inline-flex; align-items: center; gap: 6px;
   min-height: 48px; padding: 0 26px; border-radius: 980px;
   font-size: 17px; font-weight: 500;
@@ -147,71 +195,98 @@ h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "
 .sec h2 { font-size: clamp(28px, 3.4vw, 36px); letter-spacing: -0.03em; line-height: 1.1; }
 .sec p { color: var(--muted); font-size: 17px; }
 
-/* Work overview */
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.card {
-  background: var(--tile);
-  border-radius: 22px;
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+/* Projects: one row per project, alternating sides. Each project has its own frame and its own
+   entrance, driven by --p (0 when the row enters at the bottom of the screen, 1 when it is in place). */
+.project {
+  --p: 1; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(32px, 6vw, 88px);
+  align-items: center; padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--line);
 }
-.card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -28px rgba(0,0,0,0.35); }
-/* Light mode: white cards floating off the page, a tight contact shadow plus a wide soft one */
-:root:not([data-theme="dark"]) .card {
-  background: #fff;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.04),
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 6px 16px -4px rgba(0, 0, 0, 0.07),
-    0 24px 48px -16px rgba(0, 0, 0, 0.12);
+.project:first-child { border-top: 0; padding-top: clamp(24px, 4vw, 48px); }
+.project:nth-child(odd) { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
+.project:nth-child(odd) .copy { order: -1; }
+.copy { opacity: clamp(0, calc(var(--p) * 1.6 - 0.4), 1); transform: translateX(calc((1 - var(--p)) * 48px)); }
+.project:nth-child(odd) .copy { transform: translateX(calc((1 - var(--p)) * -48px)); }
+.copy .big {
+  display: block; font-size: clamp(64px, 8vw, 112px); font-weight: 700; letter-spacing: -0.06em; line-height: 0.9; margin-bottom: 18px;
+  color: transparent; -webkit-text-stroke: 1.5px var(--c);
 }
-:root:not([data-theme="dark"]) .card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.04),
-    0 2px 4px rgba(0, 0, 0, 0.04),
-    0 14px 28px -8px rgba(0, 0, 0, 0.12),
-    0 40px 72px -24px rgba(0, 0, 0, 0.24);
-}
-.thumb {
-  aspect-ratio: 16 / 9;
-  background: var(--card);
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
-  overflow: hidden;
-}
-.thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
-.thumb .dark-only { display: none; }
-:root[data-theme="dark"] .thumb .dark-only { display: block; }
-:root[data-theme="dark"] .thumb .light-only { display: none; }
-.body { padding: 20px 22px 8px; display: flex; flex-direction: column; flex: 1; }
-.kicker { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
-.card h3 { font-size: 22px; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 6px; }
-.card .desc { color: var(--muted); font-size: 15px; line-height: 1.45; margin-bottom: 10px; }
-.card .tags { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-.links { display: flex; gap: 18px; flex-wrap: wrap; margin-top: auto; }
-.links a { color: var(--accent); font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.copy .num { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); margin-bottom: 12px; }
+.copy h3 { font-size: clamp(32px, 3.8vw, 48px); letter-spacing: -0.045em; line-height: 1.04; margin-bottom: 16px; }
+.copy .desc { font-size: clamp(17px, 1.4vw, 19px); color: var(--muted); line-height: 1.5; max-width: 44ch; margin-bottom: 20px; }
+.copy .tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin-bottom: 18px; }
+.copy .tags li { font-size: 13px; padding: 5px 12px; border-radius: 980px; background: var(--tile); color: var(--muted); }
+.links { display: flex; gap: 18px; flex-wrap: wrap; }
+.links a { color: var(--accent); font-size: 17px; min-height: 44px; display: inline-flex; align-items: center; }
 .links a:hover { text-decoration: underline; }
 .links a::after { content: " \203A"; margin-left: 4px; }
-.more ul { list-style: none; display: grid; gap: 12px; margin: 4px 0 18px; }
-.more li { font-size: 15px; line-height: 1.4; padding-top: 12px; border-top: 1px solid var(--line); }
-.more li:first-child { border-top: 0; padding-top: 0; }
-.more li span { display: block; color: var(--muted); font-size: 13px; }
 
-/* Video tiles: poster + Apple-style play button; a click opens the full-size player */
-.tile { position: relative; display: block; width: 100%; padding: 0; border: 0; background: transparent; font: inherit; cursor: pointer; }
-.tile img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
-.tile:hover img { transform: scale(1.03); }
-.tile .play {
-  position: absolute; right: 12px; bottom: 12px; width: 44px; height: 44px; border-radius: 50%;
-  display: grid; place-items: center; color: #fff;
-  background: rgba(40, 40, 44, 0.56);
-  backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px);
-  transition: background 0.2s, transform 0.2s var(--ease);
+.shot { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; perspective: 1600px; }
+.shot::before {   /* the project's colour glowing behind its frame */
+  content: ""; position: absolute; inset: -12% -8%; z-index: -1; pointer-events: none; opacity: calc(var(--p) * 0.9);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c) 34%, transparent), transparent); filter: blur(40px);
 }
-.tile:hover .play { background: rgba(40, 40, 44, 0.78); }
-.tile:active .play { transform: scale(0.92); }
-.tile .play svg { width: 18px; height: 18px; margin-left: 2px; }
+.frame { position: relative; display: block; will-change: transform; transition: transform 0.15s linear; }
+.view { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #0b0b0c; }
+.view video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.shot:hover .view video { transform: scale(1.03); }
+.view video { transition: transform 0.6s var(--ease); }
+.win { border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 40px 90px -30px rgba(0,0,0,0.5); }
+.win .bar { height: 30px; display: flex; align-items: center; gap: 7px; padding: 0 13px; background: #1c1c1e; }
+.win .bar i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+.win .bar i:nth-child(2) { background: #febc2e; } .win .bar i:nth-child(3) { background: #28c840; }
+.win .bar .url { margin: 0 auto; transform: translateX(-24px); font-size: 12px; color: #8e8e93; padding: 3px 14px; border-radius: 6px; background: #2c2c2e; }
+
+/* 01 PowerPoint: two slides fan out from behind the playing one */
+.deck .view { border-radius: 10px; box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 40px 90px -30px rgba(0,0,0,0.45); }
+.deck .sheet { position: absolute; inset: 0; border-radius: 10px; background: var(--card); box-shadow: 0 0 0 1px var(--line), 0 20px 50px -30px rgba(0,0,0,0.4); }
+.deck .sheet:nth-child(1) { transform: translate(calc(var(--p) * -6%), calc(var(--p) * 5%)) rotate(calc(var(--p) * -7deg)); }
+.deck .sheet:nth-child(2) { transform: translate(calc(var(--p) * 5%), calc(var(--p) * 7%)) rotate(calc(var(--p) * 5deg)); }
+[data-fx="fan"] .frame { transform: translateY(calc((1 - var(--p)) * 80px)); }
+
+/* 02 SmartBI: comes into focus out of a blur */
+[data-fx="zoom"] .frame { transform: scale(calc(0.78 + var(--p) * 0.22)); filter: blur(calc((1 - var(--p)) * 14px)); opacity: calc(0.2 + var(--p) * 0.8); }
+
+/* 03 Voice Agent: opens from the centre like a call connecting; the waveform talks */
+[data-fx="wipe"] .frame { clip-path: inset(calc((1 - var(--p)) * 44%) calc((1 - var(--p)) * 30%) round 14px); }
+.callbar { display: flex; align-items: center; gap: 14px; height: 38px; padding: 0 14px; background: #111113; color: #8e8e93; font-size: 12px; }
+.callbar b { display: inline-flex; align-items: center; gap: 7px; color: #f5f5f7; font-weight: 600; }
+.rec { width: 8px; height: 8px; border-radius: 50%; background: #ff453a; animation: blink 1.4s infinite; }
+@keyframes blink { 50% { opacity: 0.25; } }
+.wave { flex: 1; display: flex; align-items: center; justify-content: center; gap: 3px; height: 100%; }
+.wave i { width: 3px; height: 18px; border-radius: 2px; background: var(--c); transform: scaleY(0.3); animation: talk 1.1s ease-in-out infinite; animation-delay: calc(var(--k) * -0.13s); }
+@keyframes talk { 0%, 100% { transform: scaleY(0.25); } 40% { transform: scaleY(1); } 70% { transform: scaleY(0.5); } }
+
+/* 04 HittaJob: swings in from the side like a door */
+[data-fx="swing"] .frame { transform-origin: 0 50%; transform: rotateY(calc((1 - var(--p)) * 38deg)) translateX(calc((1 - var(--p)) * -40px)); }
+
+/* 05 Kontokoll: a laptop whose lid opens as you scroll */
+.laptop { padding: 0 4%; }
+.lidpart { display: block; transform-origin: 50% 100%; transform: rotateX(calc((1 - var(--p)) * -88deg)); border: 10px solid #1c1c1e; border-bottom-width: 14px; border-radius: 16px 16px 0 0; background: #1c1c1e; box-shadow: 0 30px 70px -30px rgba(0,0,0,0.5); }
+.lidpart .view { border-radius: 4px; }
+.laptop .base { display: block; height: 14px; margin: 0 -4%; border-radius: 0 0 16px 16px; background: linear-gradient(#d8d8dc, #a7a7ac); box-shadow: 0 18px 30px -16px rgba(0,0,0,0.5); }
+:root[data-theme="dark"] .laptop .base { background: linear-gradient(#5a5a5e, #2c2c2e); }
+
+/* 06 Quizmys: the window rises, then a player's phone slides in */
+[data-fx="rise"] .frame { transform: translateY(calc((1 - var(--p)) * 100px)); }
+.phone {
+  position: absolute; right: -5%; bottom: -12%; width: 27%; aspect-ratio: 9 / 18; padding: 14% 7% 0; display: flex; flex-direction: column; gap: 6%;
+  border: 6px solid #111; border-radius: 22px; background: #fff; color: #1d1d1f; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+  opacity: clamp(0, calc(var(--p) * 2 - 1), 1);
+  transform: translate(calc((1 - var(--p)) * 140px), calc((1 - var(--p)) * 30px)) rotate(calc((1 - var(--p)) * 14deg));
+}
+.phone .q { font-size: clamp(7px, 0.6vw, 9px); color: #86868b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.phone .qt { font-size: clamp(9px, 0.85vw, 12px); font-weight: 700; line-height: 1.25; }
+.phone .ans { display: grid; gap: 6px; }
+.phone .ans i { font-style: normal; font-size: clamp(8px, 0.75vw, 11px); font-weight: 600; padding: 7px 8px; border-radius: 8px; background: #f2f2f4; }
+.phone .ans i.pick { background: var(--c); color: #fff; animation: picked 3s ease-in-out infinite; }
+@keyframes picked { 0%, 30% { background: #f2f2f4; color: #1d1d1f; } 40%, 100% { background: var(--c); color: #fff; } }
+
+/* Academic projects, a quiet list under the projects */
+.also { margin-top: clamp(24px, 4vw, 48px); }
+.also ul { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 28px; }
+.also li { padding-top: 16px; border-top: 1px solid var(--line); font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.also li span { display: block; margin-top: 4px; font-size: 14px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
+.kicker { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
 
 /* Full-size player */
 .lightbox {
@@ -264,20 +339,38 @@ footer a:hover { color: var(--text); }
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
 
+@media (max-width: 900px) {
+  .journey { grid-template-columns: 1fr; }
+  .journey .year { display: none; }
+  .steps { padding: 0; }
+  .steps li { min-height: 0; opacity: 1; transform: none; padding: 22px 0; }
+  .steps li::before { content: attr(data-year); font-size: 56px; font-weight: 700; letter-spacing: -0.05em; line-height: 1; margin-bottom: 8px;
+    color: var(--accent); }
+  .project, .project:nth-child(odd) { grid-template-columns: 1fr; gap: 28px; }
+  .project:nth-child(odd) .copy { order: 0; }
+  .phone { right: -2%; }
+  .also ul { grid-template-columns: repeat(2, 1fr); gap: 20px 24px; }
+}
 @media (max-width: 980px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
   .story { grid-template-columns: 1fr; }
   .role { grid-template-columns: 1fr; gap: 6px; }
 }
 @media (max-width: 600px) {
   nav ul li.hide-sm { display: none; }
   nav ul { gap: 18px; }
-  .grid { grid-template-columns: 1fr; }
+  .also ul { grid-template-columns: 1fr; }
   .stats { grid-template-columns: 1fr; }
   .stat + .stat { border-left: 0; border-top: 1px solid var(--line); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .hero h1 .w { opacity: 1; filter: none; transform: none; animation: none; }
+  .hero::before { animation: none; }
+  .steps li { opacity: 1; transform: none; }
+  .project { --p: 1 !important; }
+  .wave i, .rec, .phone .ans i.pick { animation: none; }
+  .pulse { animation: none; }
+  .screen video { transition: none; }
   .lightbox[open] { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
@@ -285,6 +378,7 @@ footer a:hover { color: var(--text); }
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
 
 <nav aria-label="Main">
   <div class="wrap">
@@ -303,10 +397,10 @@ footer a:hover { color: var(--text); }
   </div>
 </nav>
 
-<main id="main">
+<main id="main" style="isolation: isolate">
   <header class="hero wrap" id="top">
-    <p class="eyebrow reveal">Ali Shirzad, Software Engineer</p>
-    <h1 class="reveal">Software that <span>does the work.</span></h1>
+    <p class="status reveal"><span class="pulse" aria-hidden="true"></span><span><b>Ali Shirzad</b> · Software Engineer · Open to work</span></p>
+    <h1><span class="w" style="--i:0">Software</span> <span class="w" style="--i:1">that</span> <span class="w m" style="--i:2">does</span> <span class="w m" style="--i:3">the</span> <span class="w m" style="--i:4">work.</span></h1>
     <p class="lede reveal">Web apps, backend services and automation. At Volvo my tools save engineers <strong>400 hours a year.</strong></p>
     <div class="ctas reveal">
       <a class="btn primary" href="mailto:ali.shirzad.cs@gmail.com">Get in touch</a>
@@ -314,113 +408,100 @@ footer a:hover { color: var(--text); }
     </div>
   </header>
 
-  <section class="wrap" id="work" aria-labelledby="work-h">
-    <div class="sec reveal">
-      <h2 id="work-h">Personal projects</h2>
-      <p>Built in my own time. The live ones open right in your browser.</p>
-    </div>
-    <div class="grid">
 
-      <article class="card reveal">
-        <button class="thumb tile" type="button" data-src="video/powerpoint-ai.mp4" data-name="PowerPoint AI Assistant" aria-label="Play PowerPoint AI Assistant video">
-          <img src="video/powerpoint-ai.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+  <section class="wrap" id="work" aria-labelledby="work-h">
+    <div class="head reveal">
+      <h2 id="work-h">Personal projects</h2>
+      <p class="lede">Built in my own time. The live ones open right in your browser.</p>
+    </div>
+    <div class="projects">
+      <article class="project" style="--c: #ff6b35" data-fx="fan">
+        <button class="shot" type="button" data-src="video/powerpoint-ai.mp4" data-name="PowerPoint AI Assistant" aria-label="Play PowerPoint AI Assistant video">
+          <span class="frame deck"><span class="sheet"></span><span class="sheet"></span><span class="view"><video data-src="video/powerpoint-ai.mp4" poster="video/powerpoint-ai.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span>
         </button>
-        <div class="body">
-          <p class="kicker">Office Add-in · AI</p>
+        <div class="copy">
+          <span class="big" aria-hidden="true">01</span>
+          <p class="num">Office Add-in · AI</p>
           <h3>PowerPoint AI Assistant</h3>
           <p class="desc">A chat panel inside PowerPoint. One sentence becomes a consulting-style deck, and any slide can be edited in place. The AI key stays on a backend, and the model is not allowed to invent numbers.</p>
-          <p class="tags">JavaScript · Office.js · Node.js · LLM API</p>
+          <ul class="tags"><li>JavaScript</li><li>Office.js</li><li>Node.js</li><li>LLM API</li></ul>
           <div class="links"><a href="https://github.com/alishir99/powerpoint-ai-assistant" target="_blank" rel="noopener">View code</a></div>
         </div>
       </article>
-
-      <article class="card reveal" data-warm="https://smartbi.jollycliff-2adc6508.francecentral.azurecontainerapps.io https://api.jollycliff-2adc6508.francecentral.azurecontainerapps.io/api/warm">
-        <button class="thumb tile" type="button" data-src="video/smartbi.mp4" data-name="SmartBI Insights" aria-label="Play SmartBI Insights video">
-          <img src="video/smartbi.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+      <article class="project" style="--c: #0a84ff" data-fx="zoom" data-warm="https://smartbi.jollycliff-2adc6508.francecentral.azurecontainerapps.io https://api.jollycliff-2adc6508.francecentral.azurecontainerapps.io/api/warm">
+        <button class="shot" type="button" data-src="video/smartbi.mp4" data-name="SmartBI Insights" aria-label="Play SmartBI Insights video">
+          <span class="frame win"><span class="bar"><i></i><i></i><i></i><span class="url">smartbi.azurecontainerapps.io</span></span><span class="view"><video data-src="video/smartbi.mp4" poster="video/smartbi.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span>
         </button>
-        <div class="body">
-          <p class="kicker">Full stack · Live on Azure</p>
+        <div class="copy">
+          <span class="big" aria-hidden="true">02</span>
+          <p class="num">Full stack · Live on Azure</p>
           <h3>SmartBI Insights</h3>
           <p class="desc">Sales dashboard for retail suppliers, with follow up questions in Swedish or English. Every figure comes straight from the database. Runs on Azure Container Apps and deploys itself from GitHub Actions once the tests pass.</p>
-          <p class="tags">React · FastAPI · PostgreSQL · Azure · GitHub Actions</p>
+          <ul class="tags"><li>React</li><li>FastAPI</li><li>PostgreSQL</li><li>Azure</li><li>GitHub Actions</li></ul>
           <div class="links"><a href="https://smartbi.jollycliff-2adc6508.francecentral.azurecontainerapps.io" target="_blank" rel="noopener">Open app</a><a href="https://github.com/alishir99/SmartBI" target="_blank" rel="noopener">View code</a></div>
         </div>
       </article>
-
-      <article class="card reveal">
-        <button class="thumb tile" type="button" data-src="video/voice-agent.mp4" data-name="AI Voice Agent" aria-label="Play AI Voice Agent video">
-          <img src="video/voice-agent.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+      <article class="project" style="--c: #30b0c7" data-fx="wipe">
+        <button class="shot" type="button" data-src="video/voice-agent.mp4" data-name="AI Voice Agent" aria-label="Play AI Voice Agent video">
+          <span class="frame win"><span class="callbar"><b><span class="rec"></span>On a call</b><span class="wave"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><i style="--k:5"></i><i style="--k:6"></i><i style="--k:7"></i><i style="--k:8"></i><i style="--k:9"></i><i style="--k:10"></i><i style="--k:11"></i><i style="--k:12"></i><i style="--k:13"></i></span><span>Debt negotiation</span></span><span class="view"><video data-src="video/voice-agent.mp4" poster="video/voice-agent.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span>
         </button>
-        <div class="body">
-          <p class="kicker">Backend · Voice AI</p>
+        <div class="copy">
+          <span class="big" aria-hidden="true">03</span>
+          <p class="num">Backend · Voice AI</p>
           <h3>AI Voice Agent</h3>
           <p class="desc">Negotiates a $1,000 debt out loud. A policy service, not the model, decides every offer it is allowed to make.</p>
-          <p class="tags">Python · Cloudflare Workers · Vapi</p>
-          <div class="links">
-            <a href="https://github.com/alishir99/AI-Voice-Agent" target="_blank" rel="noopener">View code</a>
-          </div>
+          <ul class="tags"><li>Python</li><li>Cloudflare Workers</li><li>Vapi</li></ul>
+          <div class="links"><a href="https://github.com/alishir99/AI-Voice-Agent" target="_blank" rel="noopener">View code</a></div>
         </div>
       </article>
-
-      <article class="card reveal">
-        <button class="thumb tile" type="button" data-src="video/hittajob.mp4" data-name="HittaJob" aria-label="Play HittaJob video">
-          <img src="video/hittajob.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+      <article class="project" style="--c: #ff7a1a" data-fx="swing">
+        <button class="shot" type="button" data-src="video/hittajob.mp4" data-name="HittaJob" aria-label="Play HittaJob video">
+          <span class="frame win"><span class="bar"><i></i><i></i><i></i><span class="url">hittajob.pages.dev</span></span><span class="view"><video data-src="video/hittajob.mp4" poster="video/hittajob.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span>
         </button>
-        <div class="body">
-          <p class="kicker">Web app · Live</p>
+        <div class="copy">
+          <span class="big" aria-hidden="true">04</span>
+          <p class="num">Web app · Live</p>
           <h3>HittaJob</h3>
           <p class="desc">Job search tracker that pulls in postings and follows each application from saved to offer.</p>
-          <p class="tags">React · Node.js · Cloudflare Pages</p>
+          <ul class="tags"><li>React</li><li>Node.js</li><li>Cloudflare Pages</li></ul>
           <div class="links"><a href="https://hittajob.pages.dev" target="_blank" rel="noopener">Open app</a></div>
         </div>
       </article>
-
-      <article class="card reveal">
-        <button class="thumb tile" type="button" data-src="video/kontokoll.mp4" data-name="Kontokoll" aria-label="Play Kontokoll video">
-          <img src="video/kontokoll.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+      <article class="project" style="--c: #30d158" data-fx="lid">
+        <button class="shot" type="button" data-src="video/kontokoll.mp4" data-name="Kontokoll" aria-label="Play Kontokoll video">
+          <span class="frame laptop"><span class="lidpart"><span class="view"><video data-src="video/kontokoll.mp4" poster="video/kontokoll.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span><span class="base"></span></span>
         </button>
-        <div class="body">
-          <p class="kicker">Web app · Live</p>
+        <div class="copy">
+          <span class="big" aria-hidden="true">05</span>
+          <p class="num">Web app · Live</p>
           <h3>Kontokoll</h3>
-          <p class="desc">Personal finance dashboard built from your bank's CSV export. Runs in the browser. Nothing is uploaded.</p>
-          <p class="tags">JavaScript · HTML · CSS</p>
+          <p class="desc">Personal finance dashboard built from your bank&#x27;s CSV export. Runs in the browser. Nothing is uploaded.</p>
+          <ul class="tags"><li>JavaScript</li><li>HTML</li><li>CSS</li></ul>
           <div class="links"><a href="https://alishir99.github.io/kontokol/" target="_blank" rel="noopener">Open app</a><a href="https://github.com/alishir99/kontokol" target="_blank" rel="noopener">View code</a></div>
         </div>
       </article>
-
-      <article class="card reveal">
-        <button class="thumb tile" type="button" data-src="video/friday-quiz.mp4" data-name="Quizmys" aria-label="Play Quizmys video">
-          <img src="video/friday-quiz.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+      <article class="project" style="--c: #ff375f" data-fx="rise">
+        <button class="shot" type="button" data-src="video/friday-quiz.mp4" data-name="Quizmys" aria-label="Play Quizmys video">
+          <span class="frame win"><span class="bar"><i></i><i></i><i></i><span class="url">quizmys.pages.dev</span></span><span class="view"><video data-src="video/friday-quiz.mp4" poster="video/friday-quiz.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span><span class="phone" aria-hidden="true"><span class="q">Question 3 of 10</span><span class="qt">Which year did the team start?</span><span class="ans"><i>2019</i><i class="pick">2021</i><i>2022</i><i>2024</i></span></span>
         </button>
-        <div class="body">
-          <p class="kicker">Web app · Live</p>
+        <div class="copy">
+          <span class="big" aria-hidden="true">06</span>
+          <p class="num">Web app · Live</p>
           <h3>Quizmys</h3>
-          <p class="desc">Team quiz that works on any computer or phone. Everyone answers on their own screen; it scores itself and picks next week's host.</p>
-          <p class="tags">Node.js · Cloudflare Pages</p>
-          <div class="links"><a href="https://quizmys.pages.dev" target="_blank" rel="noopener">Open app</a><a href="https://github.com/alishir99">View code</a></div>
+          <p class="desc">Team quiz that works on any computer or phone. Everyone answers on their own screen; it scores itself and picks next week&#x27;s host.</p>
+          <ul class="tags"><li>Node.js</li><li>Cloudflare Pages</li></ul>
+          <div class="links"><a href="https://quizmys.pages.dev" target="_blank" rel="noopener">Open app</a><a href="https://github.com/alishir99" target="_blank" rel="noopener">View code</a></div>
         </div>
       </article>
-
-      <article class="card more reveal">
-        <div class="body">
-          <p class="kicker">Chalmers</p>
-          <h3>Academic projects</h3>
-          <ul>
-            <li>GPU accelerated CFD solver<span>Python, CUDA and MPI on A100 and H100 clusters.</span></li>
-            <li>AI pollen detection, with Ericsson<span>Classification pipeline, over 90% accuracy.</span></li>
-            <li>Image enhancement and colour restoration<span>ResNet50 and U-Net in PyTorch and TensorFlow.</span></li>
-            <li>Multi vehicle coordination<span>Bachelor's thesis. Real time control of autonomous scale cars.</span></li>
-          </ul>
-          <div class="links"><a href="cv.pdf" target="_blank" rel="noopener">Full CV</a></div>
-        </div>
-      </article>
-
+    </div>
+    <div class="also reveal">
+      <p class="kicker">Also at Chalmers</p>
+      <ul>
+        <li>GPU accelerated CFD solver<span>Python, CUDA and MPI on A100 and H100 clusters.</span></li>
+        <li>AI pollen detection, with Ericsson<span>Classification pipeline, over 90% accuracy.</span></li>
+        <li>Image enhancement and colour restoration<span>ResNet50 and U-Net in PyTorch and TensorFlow.</span></li>
+        <li>Multi vehicle coordination<span>Bachelor's thesis. Real time control of autonomous scale cars.</span></li>
+      </ul>
     </div>
   </section>
 
@@ -430,9 +511,9 @@ footer a:hover { color: var(--text); }
       <p class="lede">Volvo Group Trucks Technology, building tools hardware engineers use every week.</p>
     </div>
     <div class="stats xp-stats reveal">
-      <div class="stat"><b>400 h</b><span>engineering time saved per year at Volvo</span></div>
-      <div class="stat"><b>3</b><span>roles at Volvo Group Trucks Technology</span></div>
-      <div class="stat"><b>1 year</b><span>of software engineering at Volvo Group</span></div>
+      <div class="stat"><b data-count="400" data-suffix=" h">400 h</b><span>engineering time saved per year at Volvo</span></div>
+      <div class="stat"><b data-count="3">3</b><span>roles at Volvo Group Trucks Technology</span></div>
+      <div class="stat"><b data-count="1" data-suffix=" year">1 year</b><span>of software engineering at Volvo Group</span></div>
     </div>
     <div class="timeline">
       <div class="role reveal">
@@ -476,11 +557,17 @@ footer a:hover { color: var(--text); }
       <h2 id="about-h">About me</h2>
       <p class="lede">How hard can it be?</p>
     </div>
+    <div class="journey">
+      <div class="year" aria-hidden="true"><span id="yr">2015</span></div>
+      <ol class="steps">
+        <li data-year="2015" class="active"><h3>Arrived in Sweden.</h3><p>No Swedish, and very little English.</p></li>
+        <li data-year="2021"><h3>Started at Chalmers.</h3><p>In upper secondary school I told my English teacher I wanted to study there. She was honest: the teaching is in English, and with my English at the time she would think twice.</p></li>
+        <li data-year="2025"><h3>First summer at Volvo.</h3><p>I rebuilt a schematic tool and wrote the validation that made the team trust it. It replaced a manual workflow costing about 400 hours a year.</p></li>
+        <li data-year="2026"><h3>Graduated from Chalmers.</h3><p>M.Sc. in Complex Adaptive Systems. My thesis at Volvo predicts truck vibration in seconds instead of hours.</p></li>
+      </ol>
+    </div>
     <div class="story">
       <div class="reveal">
-        <p>I came to Sweden in 2015 without speaking Swedish, and my English was very limited.</p>
-        <p>I learned the language in grades 7 to 9, then moved on to the Technology programme in upper secondary school. In my second year I told my English teacher I wanted to study at Chalmers. She was honest with me: the teaching there is in English, and with my English at the time, she would think twice about it.</p>
-        <p>In 2026 I graduated from Chalmers with a degree in Computer Science and Engineering.</p>
         <p>That road left me with a habit I still have. When a problem looks hard, my first thought is not <em>"I can't do this"</em> but <em>"how hard can it be?"</em> Then I figure out how it works, learn what I need, and solve it. I care about details and the quality of what I deliver, and about the people I work with. A solution should not only be correct. It should be useful to the person using it.</p>
         <p>It is also why I build things in my free time. Our team ran its Friday quiz in PowerPoint. Nobody asked me to fix it, but I thought it could be simpler, so I built <a href="https://quizmys.pages.dev" target="_blank" rel="noopener">Quizmys</a>.</p>
       </div>
@@ -498,6 +585,7 @@ footer a:hover { color: var(--text); }
     <p class="lede reveal">I would be happy to hear from you. I am looking for software engineering roles in Sweden, in backend, full stack, automation or ML.</p>
     <div class="ctas reveal">
       <a class="btn primary" href="mailto:ali.shirzad.cs@gmail.com">Email me</a>
+      <button class="btn ghost copy" type="button" data-email="ali.shirzad.cs@gmail.com">Copy email</button>
       <a class="btn ghost" href="https://www.linkedin.com/in/alishirzad99" target="_blank" rel="noopener">LinkedIn</a>
       <a class="btn ghost" href="https://github.com/alishir99" target="_blank" rel="noopener">GitHub</a>
     </div>
@@ -536,20 +624,97 @@ footer a:hover { color: var(--text); }
   // Video tiles: a click opens the full-size player and starts from the beginning.
   const lb = document.querySelector('.lightbox');
   const lbVid = lb.querySelector('video');
-  document.querySelectorAll('.tile').forEach((tile) => tile.addEventListener('click', () => {
-    lbVid.poster = tile.querySelector('img').currentSrc;
-    lbVid.src = tile.dataset.src;
-    lbVid.muted = true;   // every video opens muted; the viewer can unmute
-    lb.setAttribute('aria-label', tile.dataset.name + ' video');
+  const openVideo = (src, poster, name, muted = true) => {
+    lbVid.poster = poster;
+    lbVid.src = src;
+    lbVid.muted = muted;   // every video opens muted; the viewer can unmute
+    lb.setAttribute('aria-label', name + ' video');
     lb.showModal();
     lbVid.play().catch(() => {});
-  }));
+  };
+  document.querySelectorAll('.shot').forEach((shot) => shot.addEventListener('click', () =>
+    openVideo(shot.dataset.src, shot.querySelector('video').poster, shot.dataset.name)));
   lb.addEventListener('click', (e) => { if (e.target !== lbVid) lb.close(); });
   // SmartBI scales to zero on Azure. Wake it (web, api, mcp, database) as soon as anyone opens
   // the portfolio, so "Open app" isn't a 30 s cold start. Opaque no-cors pings: we only need them sent.
   for (const card of document.querySelectorAll('[data-warm]'))
     for (const url of card.dataset.warm.split(' ')) fetch(url, { mode: 'no-cors' }).catch(() => {});
   lb.addEventListener('close', () => { lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load(); });
+
+  // ---- Motion. Everything below is skipped for visitors who ask for reduced motion. ----
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // Scroll: progress hairline and hero fade-out. At most one update per frame.
+  const bar = document.querySelector('.progress');
+  const hero = document.querySelector('.hero');
+  const rows = [...document.querySelectorAll('.project')];
+  let ticking = false;
+  const onScroll = () => {
+    ticking = false;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.setProperty('--p', max > 0 ? scrollY / max : 0);
+    if (calm) return;
+    hero.style.setProperty('--out', Math.min(1, scrollY / (hero.offsetHeight * 1.2)));
+    for (const row of rows) {   // 0 as the row enters at the bottom, 1 once it is three quarters up the screen
+      const t = Math.min(1, Math.max(0, (innerHeight - row.getBoundingClientRect().top) / (innerHeight * 0.75)));
+      row.style.setProperty('--p', (1 - (1 - t) ** 3).toFixed(3));
+    }
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+
+  // Stats count up the first time they come into view.
+  const counter = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      counter.unobserve(e.target);
+      const el = e.target, end = +el.dataset.count, suffix = el.dataset.suffix || '', t0 = performance.now();
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / 1400), eased = 1 - (1 - k) ** 3;
+        el.textContent = Math.round(end * eased) + suffix;
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+  }, { threshold: 0.6 });
+  if (!calm) document.querySelectorAll('[data-count]').forEach((el) => counter.observe(el));
+
+  // Each project's video downloads and plays only while its row is on screen.
+  const playWatch = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      const v = e.target.querySelector('video');
+      if (!e.isIntersecting) { v.pause(); continue; }
+      if (!v.getAttribute('src')) v.src = v.dataset.src;
+      if (!calm) v.play().catch(() => {});
+    }
+  }, { threshold: 0.25 });
+  document.querySelectorAll('.shot').forEach((el) => playWatch.observe(el));
+
+  // Journey: the step in the middle of the screen sets the pinned year, which rolls in from below.
+  const yr = document.getElementById('yr');
+  const steps = [...document.querySelectorAll('.steps li')];
+  const stepWatch = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      steps.forEach((li) => li.classList.toggle('active', li === e.target));
+      const y = e.target.dataset.year;
+      if (yr.textContent === y) continue;
+      yr.textContent = y;
+      if (!calm) yr.animate([{ opacity: 0, transform: 'translateY(40%)', filter: 'blur(10px)' }, { opacity: 1, transform: 'none', filter: 'none' }],
+        { duration: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+    }
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  steps.forEach((li) => stepWatch.observe(li));
+
+  // Copy email, with a short confirmation.
+  const copyBtn = document.querySelector('.copy');
+  copyBtn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(copyBtn.dataset.email); } catch (e) { return; }
+    copyBtn.textContent = 'Copied \u2713';
+    copyBtn.classList.add('done');
+    setTimeout(() => { copyBtn.textContent = 'Copy email'; copyBtn.classList.remove('done'); }, 1800);
+  });
 </script>
 </body>
 </html>
