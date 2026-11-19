@@ -269,17 +269,16 @@ h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "
 /* 06 Quizmys: the window rises, then a player's phone slides in */
 [data-fx="rise"] .frame { transform: translateY(calc((1 - var(--p)) * 100px)); }
 .phone {
-  position: absolute; right: -5%; bottom: -12%; width: 27%; aspect-ratio: 9 / 18; padding: 14% 7% 0; display: flex; flex-direction: column; gap: 6%;
-  border: 6px solid #111; border-radius: 22px; background: #fff; color: #1d1d1f; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+  position: absolute; right: -4%; bottom: -14%; width: 28%; aspect-ratio: 1 / 2.05; padding: 5px;
+  border-radius: 28px; background: #0b0b0c; box-shadow: 0 0 0 1px #8a8a8f, 0 30px 60px -20px rgba(0,0,0,0.5);
   opacity: clamp(0, calc(var(--p) * 2 - 1), 1);
   transform: translate(calc((1 - var(--p)) * 140px), calc((1 - var(--p)) * 30px)) rotate(calc((1 - var(--p)) * 14deg));
 }
-.phone .q { font-size: clamp(7px, 0.6vw, 9px); color: #86868b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-.phone .qt { font-size: clamp(9px, 0.85vw, 12px); font-weight: 700; line-height: 1.25; }
-.phone .ans { display: grid; gap: 6px; }
-.phone .ans i { font-style: normal; font-size: clamp(8px, 0.75vw, 11px); font-weight: 600; padding: 7px 8px; border-radius: 8px; background: #f2f2f4; }
-.phone .ans i.pick { background: var(--c); color: #fff; animation: picked 3s ease-in-out infinite; }
-@keyframes picked { 0%, 30% { background: #f2f2f4; color: #1d1d1f; } 40%, 100% { background: var(--c); color: #fff; } }
+.phone .scr { position: absolute; inset: 5px; border-radius: 23px; overflow: hidden; background: #fff; }
+.phone .scr::before { content: ""; position: absolute; z-index: 2; top: 6px; left: 50%; width: 30%; height: 13px; transform: translateX(-50%); border-radius: 10px; background: #0b0b0c; }
+.phone .scr::after { content: "9:41"; position: absolute; z-index: 2; top: 6px; left: 13px; font-size: 9px; font-weight: 600; color: #1d1d1f; }
+.phone img { position: absolute; left: 0; top: 24px; width: 100%; height: auto; opacity: 0; transition: opacity 0.6s var(--ease); }
+.phone img.on { opacity: 1; }
 
 /* Academic projects, a quiet list under the projects */
 .also { margin-top: clamp(24px, 4vw, 48px); }
@@ -357,7 +356,7 @@ footer a:hover { color: var(--text); }
   [data-fx="wipe"] .frame { clip-path: inset(calc((1 - var(--p)) * 46%) 0 round 14px); }
   .deck .sheet:nth-child(1) { transform: translate(calc(var(--p) * -3%), calc(var(--p) * 5%)) rotate(calc(var(--p) * -5deg)); }
   .deck .sheet:nth-child(2) { transform: translate(calc(var(--p) * 3%), calc(var(--p) * 7%)) rotate(calc(var(--p) * 4deg)); }
-  .phone { right: 3%; bottom: -10%; width: 31%; border-width: 4px; border-radius: 16px;
+  .phone { right: 3%; bottom: -10%; width: 30%;
     transform: translateY(calc((1 - var(--p)) * 120px)) rotate(calc((1 - var(--p)) * 8deg)); }
   .win .bar .url { transform: none; }
   .also ul { grid-template-columns: repeat(2, 1fr); gap: 20px 24px; }
@@ -405,8 +404,8 @@ footer a:hover { color: var(--text); }
   .hero::before { animation: none; }
   .steps li { opacity: 1; transform: none; }
   .project { --p: 1 !important; }
-  .wave i, .rec, .phone .ans i.pick { animation: none; }
-  .mphone img { transition: none; }
+  .wave i, .rec { animation: none; }
+  .mphone img, .phone img { transition: none; }
   .pulse { animation: none; }
   .screen video { transition: none; }
   .lightbox[open] { animation: none; }
@@ -520,7 +519,7 @@ footer a:hover { color: var(--text); }
       </article>
       <article class="project" style="--c: #ff375f" data-fx="rise">
         <button class="shot m" type="button" data-src="video/friday-quiz.mp4" data-name="Quizmys" aria-label="Play Quizmys video">
-          <span class="frame win"><span class="bar"><i></i><i></i><i></i><span class="url">quizmys.pages.dev</span></span><span class="view"><video data-src="video/friday-quiz.mp4" poster="video/friday-quiz.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span><span class="phone" aria-hidden="true"><span class="q">Question 3 of 10</span><span class="qt">Which year did the team start?</span><span class="ans"><i>2019</i><i class="pick">2021</i><i>2022</i><i>2024</i></span></span>
+          <span class="frame win"><span class="bar"><i></i><i></i><i></i><span class="url">quizmys.pages.dev</span></span><span class="view"><video data-src="video/friday-quiz.mp4" poster="video/friday-quiz.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span><span class="phone" aria-hidden="true" data-cycle><span class="scr"><img src="img/m-quizmys-3.webp" alt="" loading="lazy" decoding="async" class="on"><img src="img/m-quizmys-2.webp" alt="" loading="lazy" decoding="async"><img src="img/m-quizmys-1.webp" alt="" loading="lazy" decoding="async"></span></span>
         <span class="mphone" aria-hidden="true" data-cycle><span class="scr"><img src="img/m-quizmys-1.webp" alt="" loading="lazy" decoding="async" class="on"><img src="img/m-quizmys-2.webp" alt="" loading="lazy" decoding="async"><img src="img/m-quizmys-3.webp" alt="" loading="lazy" decoding="async"></span></span></button>
         <div class="copy">
           <span class="big" aria-hidden="true">06</span>
@@ -736,7 +735,7 @@ footer a:hover { color: var(--text); }
   const flipWatch = new IntersectionObserver((entries) => {
     for (const e of entries) e.isIntersecting ? flipping.add(e.target) : flipping.delete(e.target);
   }, { threshold: 0.4 });
-  document.querySelectorAll('.mphone[data-cycle]').forEach((el) => flipWatch.observe(el));
+  document.querySelectorAll('.mphone[data-cycle], .phone[data-cycle]').forEach((el) => flipWatch.observe(el));
   if (!calm) setInterval(() => {
     for (const m of flipping) {
       const imgs = [...m.querySelectorAll('img')], i = imgs.findIndex((x) => x.classList.contains('on'));
