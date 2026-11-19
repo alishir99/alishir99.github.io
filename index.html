@@ -379,7 +379,7 @@ footer a:hover { color: var(--text); }
 .mphone { display: none; }
 @media (max-width: 600px) {
   .shot.m .frame, .shot.m .phone { display: none; }
-  .mphone { display: block; position: relative; width: min(66%, 250px); aspect-ratio: 1 / 2; margin: 0 auto; border-radius: 40px; background: #0b0b0c;
+  .mphone { display: block; position: relative; width: min(66%, 250px); aspect-ratio: 1 / 2.1;   /* tall enough for a whole HittaJob screen, bottom bar included */ margin: 0 auto; border-radius: 40px; background: #0b0b0c;
     box-shadow: 0 0 0 1.5px #8a8a8f, 0 34px 60px -22px rgba(0, 0, 0, 0.5);
     transform: translateY(calc((1 - var(--p)) * 90px)) rotate(calc((1 - var(--p)) * -7deg)); opacity: calc(0.25 + var(--p) * 0.75); }
   .mphone .scr { position: absolute; inset: 7px; border-radius: 33px; overflow: hidden; background: #fff; }
