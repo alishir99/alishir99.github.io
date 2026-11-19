@@ -67,7 +67,7 @@ body { transition: background-color 0.3s, color 0.3s; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: 64px; -webkit-text-size-adjust: 100%; }
 body {
-  overflow-x: clip;
+  overflow-x: hidden; overflow-x: clip;   /* hidden = fallback for older Safari */
   background: var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
@@ -346,9 +346,20 @@ footer a:hover { color: var(--text); }
   .steps li { min-height: 0; opacity: 1; transform: none; padding: 22px 0; }
   .steps li::before { content: attr(data-year); font-size: 56px; font-weight: 700; letter-spacing: -0.05em; line-height: 1; margin-bottom: 8px;
     color: var(--accent); }
-  .project, .project:nth-child(odd) { grid-template-columns: 1fr; gap: 28px; }
+  /* Phones: the visual leads, text follows. Every entrance moves vertically so nothing slides off the screen. */
+  .project, .project:nth-child(odd) { grid-template-columns: 1fr; gap: 22px; padding: 52px 0; }
   .project:nth-child(odd) .copy { order: 0; }
-  .phone { right: -2%; }
+  .copy, .project:nth-child(odd) .copy { transform: translateY(calc((1 - var(--p)) * 32px)); }
+  .copy .big { font-size: 56px; margin-bottom: 10px; }
+  .copy h3 { font-size: 32px; }
+  .shot::before { inset: -6% 0; }
+  [data-fx="swing"] .frame { transform-origin: 50% 100%; transform: rotateX(calc((1 - var(--p)) * 34deg)) translateY(calc((1 - var(--p)) * 40px)); }
+  [data-fx="wipe"] .frame { clip-path: inset(calc((1 - var(--p)) * 46%) 0 round 14px); }
+  .deck .sheet:nth-child(1) { transform: translate(calc(var(--p) * -3%), calc(var(--p) * 5%)) rotate(calc(var(--p) * -5deg)); }
+  .deck .sheet:nth-child(2) { transform: translate(calc(var(--p) * 3%), calc(var(--p) * 7%)) rotate(calc(var(--p) * 4deg)); }
+  .phone { right: 3%; bottom: -10%; width: 31%; border-width: 4px; border-radius: 16px;
+    transform: translateY(calc((1 - var(--p)) * 120px)) rotate(calc((1 - var(--p)) * 8deg)); }
+  .win .bar .url { transform: none; }
   .also ul { grid-template-columns: repeat(2, 1fr); gap: 20px 24px; }
 }
 @media (max-width: 980px) {
@@ -356,6 +367,8 @@ footer a:hover { color: var(--text); }
   .role { grid-template-columns: 1fr; gap: 6px; }
 }
 @media (max-width: 600px) {
+  .status { font-size: 12.5px; padding: 6px 12px 6px 10px; gap: 8px; }
+  .hero::before { width: 100%; }
   nav ul li.hide-sm { display: none; }
   nav ul { gap: 18px; }
   .also ul { grid-template-columns: 1fr; }
