@@ -513,7 +513,7 @@ footer a:hover { color: var(--text); }
 
 <dialog class="lightbox" aria-label="Video">
   <button class="close" type="button" aria-label="Close">&#x2715;</button>
-  <video controls playsinline preload="none"></video>
+  <video controls playsinline muted preload="none"></video>
 </dialog>
 
 <script>
@@ -539,6 +539,7 @@ footer a:hover { color: var(--text); }
   document.querySelectorAll('.tile').forEach((tile) => tile.addEventListener('click', () => {
     lbVid.poster = tile.querySelector('img').currentSrc;
     lbVid.src = tile.dataset.src;
+    lbVid.muted = true;   // every video opens muted; the viewer can unmute
     lb.setAttribute('aria-label', tile.dataset.name + ' video');
     lb.showModal();
     lbVid.play().catch(() => {});
