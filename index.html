@@ -375,6 +375,30 @@ footer a:hover { color: var(--text); }
   .stats { grid-template-columns: 1fr; }
   .stat + .stat { border-left: 0; border-top: 1px solid var(--line); }
 }
+/* Phones: projects that have a real phone layout show it in a phone, flipping through its screens. */
+.mphone { display: none; }
+@media (max-width: 600px) {
+  .shot.m .frame, .shot.m .phone { display: none; }
+  .mphone { display: block; position: relative; width: min(66%, 250px); aspect-ratio: 1 / 2; margin: 0 auto; border-radius: 40px; background: #0b0b0c;
+    box-shadow: 0 0 0 1.5px #8a8a8f, 0 34px 60px -22px rgba(0, 0, 0, 0.5);
+    transform: translateY(calc((1 - var(--p)) * 90px)) rotate(calc((1 - var(--p)) * -7deg)); opacity: calc(0.25 + var(--p) * 0.75); }
+  .mphone .scr { position: absolute; inset: 7px; border-radius: 33px; overflow: hidden; background: #fff; }
+  .mphone .scr::before { content: ""; position: absolute; z-index: 2; top: 9px; left: 50%; width: 30%; height: 21px; transform: translateX(-50%); border-radius: 20px; background: #0b0b0c; }
+  .mphone .scr::after { content: "9:41"; position: absolute; z-index: 2; top: 10px; left: 22px; font-size: 12px; font-weight: 600; color: #1d1d1f; }
+  .mphone img { position: absolute; left: 0; top: 36px; width: 100%; height: auto; opacity: 0; transition: opacity 0.6s var(--ease); }
+  .mphone img.on { opacity: 1; }
+  .mphone.call .scr { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 58px 14px 18px; background: linear-gradient(#1c1c1e, #000); color: #f5f5f7; }
+  .mphone.call .scr::after { color: #f5f5f7; }
+  .call .who { display: grid; justify-items: center; gap: 4px; }
+  .call .av { display: grid; place-items: center; width: 62px; height: 62px; margin-bottom: 6px; border-radius: 50%; background: var(--c); font-weight: 700; font-size: 20px; }
+  .call .who b { font-size: 17px; } .call .who small { font-size: 11.5px; color: #8e8e93; }
+  .call .wave { flex: 0 0 34px; width: 100%; }
+  .call .msg { align-self: flex-start; max-width: 86%; padding: 8px 11px; border-radius: 14px 14px 14px 4px; background: #2c2c2e; font-size: 12px; line-height: 1.35; }
+  .call .msg.me { align-self: flex-end; border-radius: 14px 14px 4px 14px; background: var(--c); }
+  .call .keys { display: flex; gap: 22px; margin-top: auto; }
+  .call .keys i { width: 44px; height: 44px; border-radius: 50%; background: #3a3a3c; }
+  .call .keys i.end { background: #ff3b30; }
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .hero h1 .w { opacity: 1; filter: none; transform: none; animation: none; }
@@ -382,6 +406,7 @@ footer a:hover { color: var(--text); }
   .steps li { opacity: 1; transform: none; }
   .project { --p: 1 !important; }
   .wave i, .rec, .phone .ans i.pick { animation: none; }
+  .mphone img { transition: none; }
   .pulse { animation: none; }
   .screen video { transition: none; }
   .lightbox[open] { animation: none; }
@@ -455,9 +480,9 @@ footer a:hover { color: var(--text); }
         </div>
       </article>
       <article class="project" style="--c: #30b0c7" data-fx="wipe">
-        <button class="shot" type="button" data-src="video/voice-agent.mp4" data-name="AI Voice Agent" aria-label="Play AI Voice Agent video">
+        <button class="shot m" type="button" data-src="video/voice-agent.mp4" data-name="AI Voice Agent" aria-label="Play AI Voice Agent video">
           <span class="frame win"><span class="callbar"><b><span class="rec"></span>On a call</b><span class="wave"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><i style="--k:5"></i><i style="--k:6"></i><i style="--k:7"></i><i style="--k:8"></i><i style="--k:9"></i><i style="--k:10"></i><i style="--k:11"></i><i style="--k:12"></i><i style="--k:13"></i></span><span>Debt negotiation</span></span><span class="view"><video data-src="video/voice-agent.mp4" poster="video/voice-agent.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span>
-        </button>
+        <span class="mphone call" aria-hidden="true"><span class="scr"><span class="who"><span class="av">AI</span><b>Debt collector</b><small>AI agent · on a call</small></span><span class="wave"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i><i style="--k:3"></i><i style="--k:4"></i><i style="--k:5"></i><i style="--k:6"></i><i style="--k:7"></i><i style="--k:8"></i><i style="--k:9"></i><i style="--k:10"></i><i style="--k:11"></i><i style="--k:12"></i><i style="--k:13"></i></span><span class="msg me">Can I pay less than $1,000?</span><span class="msg">I can settle at $850 in three payments.</span><span class="keys"><i></i><i></i><i class="end"></i></span></span></span></button>
         <div class="copy">
           <span class="big" aria-hidden="true">03</span>
           <p class="num">Backend · Voice AI</p>
@@ -468,9 +493,9 @@ footer a:hover { color: var(--text); }
         </div>
       </article>
       <article class="project" style="--c: #ff7a1a" data-fx="swing">
-        <button class="shot" type="button" data-src="video/hittajob.mp4" data-name="HittaJob" aria-label="Play HittaJob video">
+        <button class="shot m" type="button" data-src="video/hittajob.mp4" data-name="HittaJob" aria-label="Play HittaJob video">
           <span class="frame win"><span class="bar"><i></i><i></i><i></i><span class="url">hittajob.pages.dev</span></span><span class="view"><video data-src="video/hittajob.mp4" poster="video/hittajob.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span>
-        </button>
+        <span class="mphone" aria-hidden="true" data-cycle><span class="scr"><img src="img/m-hittajob-1.webp" alt="" loading="lazy" decoding="async" class="on"><img src="img/m-hittajob-2.webp" alt="" loading="lazy" decoding="async"><img src="img/m-hittajob-3.webp" alt="" loading="lazy" decoding="async"><img src="img/m-hittajob-4.webp" alt="" loading="lazy" decoding="async"></span></span></button>
         <div class="copy">
           <span class="big" aria-hidden="true">04</span>
           <p class="num">Web app · Live</p>
@@ -494,9 +519,9 @@ footer a:hover { color: var(--text); }
         </div>
       </article>
       <article class="project" style="--c: #ff375f" data-fx="rise">
-        <button class="shot" type="button" data-src="video/friday-quiz.mp4" data-name="Quizmys" aria-label="Play Quizmys video">
+        <button class="shot m" type="button" data-src="video/friday-quiz.mp4" data-name="Quizmys" aria-label="Play Quizmys video">
           <span class="frame win"><span class="bar"><i></i><i></i><i></i><span class="url">quizmys.pages.dev</span></span><span class="view"><video data-src="video/friday-quiz.mp4" poster="video/friday-quiz.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></span></span><span class="phone" aria-hidden="true"><span class="q">Question 3 of 10</span><span class="qt">Which year did the team start?</span><span class="ans"><i>2019</i><i class="pick">2021</i><i>2022</i><i>2024</i></span></span>
-        </button>
+        <span class="mphone" aria-hidden="true" data-cycle><span class="scr"><img src="img/m-quizmys-1.webp" alt="" loading="lazy" decoding="async" class="on"><img src="img/m-quizmys-2.webp" alt="" loading="lazy" decoding="async"><img src="img/m-quizmys-3.webp" alt="" loading="lazy" decoding="async"></span></span></button>
         <div class="copy">
           <span class="big" aria-hidden="true">06</span>
           <p class="num">Web app · Live</p>
@@ -694,15 +719,30 @@ footer a:hover { color: var(--text); }
   if (!calm) document.querySelectorAll('[data-count]').forEach((el) => counter.observe(el));
 
   // Each project's video downloads and plays only while its row is on screen.
+  const phoneMode = matchMedia('(max-width: 600px)');
   const playWatch = new IntersectionObserver((entries) => {
     for (const e of entries) {
       const v = e.target.querySelector('video');
       if (!e.isIntersecting) { v.pause(); continue; }
+      if (phoneMode.matches && e.target.classList.contains('m')) continue;   // the phone shows screens instead
       if (!v.getAttribute('src')) v.src = v.dataset.src;
       if (!calm) v.play().catch(() => {});
     }
   }, { threshold: 0.25 });
   document.querySelectorAll('.shot').forEach((el) => playWatch.observe(el));
+
+  // Phone screens: while a phone is on screen, flip to its next screen every 2 s.
+  const flipping = new Set();
+  const flipWatch = new IntersectionObserver((entries) => {
+    for (const e of entries) e.isIntersecting ? flipping.add(e.target) : flipping.delete(e.target);
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.mphone[data-cycle]').forEach((el) => flipWatch.observe(el));
+  if (!calm) setInterval(() => {
+    for (const m of flipping) {
+      const imgs = [...m.querySelectorAll('img')], i = imgs.findIndex((x) => x.classList.contains('on'));
+      imgs[i].classList.remove('on'); imgs[(i + 1) % imgs.length].classList.add('on');
+    }
+  }, 2000);
 
   // Journey: the step in the middle of the screen sets the pinned year, which rolls in from below.
   const yr = document.getElementById('yr');
